@@ -1,0 +1,67 @@
+<div class="card wrap">
+  <!-- <p-menubar [model]="items">
+    <ng-template pTemplate="item" let-item let-root="root">
+      <a href="{{item.url}}" pRipple class="flex align-items-center p-menuitem-link">
+        <span class="ml-2">{{ item.label }}</span>
+        <i *ngIf="item.items" [ngClass]="['pi', root ? 'pi-angle-down ml-2' : 'pi-angle-right ml-auto']"></i>
+      </a>
+    </ng-template>
+  </p-menubar> -->
+<!-- inline -->
+  <!-- <button class="button-navi" nz-button nzType="primary" (click)="toggleCollapsed()">
+    <span nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></span>
+  </button> -->
+
+  <ul *ngIf="isCollapsed" nz-menu [nzMode]="nzMode" class="filter" nzTheme="light">
+    <li [routerLink]="url" nz-menu-item>
+      TRANG CHỦ
+    </li>
+    <li [routerLink]="url" nz-menu-item>
+      TẤT CẢ SẢN PHẨM
+    </li>
+    <li nz-submenu nzTitle="GIÀY CỎ NHÂN TẠO">
+      <ul>
+        <li [routerLink]="url" nz-menu-item>NIKE</li>
+        <li nz-menu-item>ADIDAS</li>
+        <li nz-menu-item>PUMA</li>
+        <li nz-menu-item>MIZUNO</li>
+        <li nz-menu-item>JOMA</li>
+        <li nz-menu-item>DESPORTE</li>
+        <li nz-menu-item>ASICS</li>
+        <li nz-menu-item>KAMITO</li>
+      </ul>
+    </li>
+    <li nz-submenu nzTitle="GIÀY FUTSAL">
+      <ul>
+        <li nz-menu-item>NIKE</li>
+        <li nz-menu-item>ADIDAS</li>
+        <li nz-menu-item>PUMA</li>
+        <li nz-menu-item>MIZUNO</li>
+        <li nz-menu-item>JOMA</li>
+        <li nz-menu-item>DESPORTE</li>
+        <li nz-menu-item>ASICS</li>
+        <li nz-menu-item>KAMITO</li>
+      </ul>
+    </li>
+
+    <li nz-submenu nzTitle="THƯƠNG HIỆU">
+      <ul>
+        <li nz-menu-item>NIKE</li>
+        <li nz-menu-item>ADIDAS</li>
+        <li nz-menu-item>PUMA</li>
+        <li nz-menu-item>MIZUNO</li>
+        <li nz-menu-item>JOMA</li>
+        <li nz-menu-item>DESPORTE</li>
+        <li nz-menu-item>ASICS</li>
+        <li nz-menu-item>KAMITO</li>
+      </ul>
+    </li>
+    <li nz-menu-item>
+      HỆ THỐNG CỬA HÀNG
+    </li>
+    <li nz-menu-item>
+      LIÊN HỆ
+    </li>
+  </ul>
+</div>
+

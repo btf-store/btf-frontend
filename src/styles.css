@@ -1,1 +1,126 @@
-/* You can add global styles to this file, and also import other style files */
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import url("styles/theme-override.css");
+@import "../node_modules/ng-zorro-antd/ng-zorro-antd.min.css";
+
+html,
+body,
+p,
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+app-root {
+  box-sizing: border-box;
+  height: 100%;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+app-root {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.mt-15 {
+  margin-top: 15px;
+}
+
+.mt-25 {
+  margin-top: 20px;
+}
+
+.mb-15 {
+  margin-bottom: 15px;
+}
+
+.mb-25 {
+  margin-bottom: 25px;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+.gap-05 {
+  gap: 0.5rem;
+}
+
+.gap-1 {
+  gap: 1rem;
+}
+
+.gap-2 {
+  gap: 2rem;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.space-evenly {
+  justify-content: space-evenly;
+}
+
+.space-around {
+  justify-content: space-around;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.full-center {
+  align-items: center;
+  justify-content: center;
+}
+
+.hidden {
+  display: none;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+@media (max-width: 1025px) {
+  html,
+  body,
+  app-root {
+    font-size: 12px;
+  }
+
+}
+
+@media (max-width: 700px) {
+  html,
+  body,
+  app-root {
+      font-size: 10px;
+  }
+}
+
+

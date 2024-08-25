@@ -1,0 +1,38 @@
+.wrap {
+  height: 50px;
+}
+
+.filter {
+  padding: 0 5px;
+}
+
+.button-navi{
+  display: none;
+}
+
+@media (max-width: 1025px) {
+  .filter li {
+    padding: 10px;
+  }
+  .button-navi{
+    display: block;
+  }
+  ul {
+    width: 100%;
+  }
+  .ant-menu-title-content{
+    color: red;
+  }
+}
+
+
+.menu-collapsed {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+}
+
+.menu-expanded {
+  max-height: 1000px; /* Một giá trị lớn đủ để hiển thị menu */
+  transition: max-height 0.3s ease-in-out;
+}

@@ -1,0 +1,15 @@
+.wrapper {
+  margin-top: 160px;
+}
+
+@media (max-width: 1023px) {
+  .wrapper {
+    margin-top: 90px;
+  }
+}
+
+@media (max-width: 431px) {
+  .wrapper {
+    margin-top: 70px;
+  }
+}

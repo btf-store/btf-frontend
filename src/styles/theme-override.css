@@ -1,0 +1,34 @@
+
+.p-element {
+  margin: auto;
+}
+.p-menubar{
+  margin: auto;
+}
+
+.pi-search {
+  cursor: pointer;
+}
+
+
+.p-menuitem-link:hover a {
+  opacity: 1;
+  display: none;
+}
+
+.ant-menu-title-content {
+  font-weight: bold;
+}
+
+
+
+
+@media (max-width: 1025px) {
+  .ant-menu-title-content {
+    font-size: 12px;
+  }
+
+  .ant-menu-submenu-title:hover{
+    color: red;
+  }
+}

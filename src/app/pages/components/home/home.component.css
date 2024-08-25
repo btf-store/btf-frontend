@@ -1,0 +1,30 @@
+.wrap-product {
+  padding: 10px;
+  max-width: 80%;
+  align-items: center;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+app-product {
+  max-width: 250px;
+}
+
+@media (max-width: 1025px) {
+
+  .wrap-product {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+
+  .wrap-product {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 90%;
+  }
+}
+
+

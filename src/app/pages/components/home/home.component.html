@@ -1,0 +1,6 @@
+<div class="wrapper column">
+  <app-slider></app-slider>
+  <div class="row gap-2 wrap-product">
+    <app-product *ngFor="let item of listProduct" (click)="navigate('product-detail')"></app-product>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+<div class="slider-container">
+  <div class="slider-wrapper"
+    [ngStyle]="{'transform': transformStyle}"
+    >
+  <img *ngFor="let image of images" [src]="image" [alt]="'Image ' + (currentIndex + 1)">
+  </div>
+  <div class="controls">
+    <i class="pi pi-back pi-angle-double-left" style="font-size: 2.5rem" (click)="backImage()"></i>
+    <i class="pi pi-next pi-angle-double-right" style="font-size: 2.5rem" (click)="nextImage()"></i>
+  </div>
+  <div class="radio-class">
+      <input class="radio-input" *ngFor="let image of images; let i = index" type="radio" [checked]="i === currentIndex" (click)="selectImage(i)">
+  </div>
+</div>
+
