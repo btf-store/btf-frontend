@@ -110,7 +110,7 @@ input[type=number]::-webkit-outer-spin-button {
   html,
   body,
   app-root {
-    font-size: 12px;
+    font-size: 14px;
   }
 
 }
@@ -119,7 +119,7 @@ input[type=number]::-webkit-outer-spin-button {
   html,
   body,
   app-root {
-      font-size: 10px;
+      font-size: 12px;
   }
 }
 

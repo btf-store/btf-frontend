@@ -35,6 +35,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 })
 export class FilterComponent {
   url: string = ""
-  @Input() nzMode: NzMenuModeType = 'horizontal';
-  @Input() isCollapsed = true;
+  @Input() nzMode!: NzMenuModeType
+  @Input() isNavbar!:boolean
+
 }

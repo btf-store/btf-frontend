@@ -1,0 +1,92 @@
+<div class="wrapper">
+  <div *ngIf="checkCart">
+    <strong class="title">
+      GIỎ HÀNG CỦA BẠN
+    </strong>
+    <div class="wrapper-cart row gap-2">
+      <div class="cart-product column gap-1">
+        <div class="wrap-all-product column gap-1 ">
+          <div *ngFor="let item of cartItems" class="row wrap-product">
+            <div class="wrap-image">
+              <img
+                src="https://product.hstatic.net/200000278317/product/nh-hung-futsal-giay-da-bong-nike-premier-iii-tf-hm0283-001-den-trang-1_accde2d2f8d54067b71da424ca71fdd5_master.jpg"
+                alt="">
+            </div>
+            <div class="wrap-product-infor row space-between">
+              <div class="product-infor">
+                <div class="text-infor">
+                  <strong>PUMA ULTRA 5 MATCH VOL UP TT - 108091-01 - TRẮNG / XANH/ HỒNG</strong>
+                  <p>Size: 8 UK</p>
+                </div>
+                <div class="row space-between">
+                  <div class="row gap-05 wrap-quantity">
+                    <button type="button" class="change-quan">
+                      <span nz-icon nzType="minus" nzTheme="outline"></span>
+                    </button>
+                    <!-- <h2 style="margin-top: 5px;">{{quantity}}</h2> -->
+                    <input class="input-quantity" type="number" value="10">
+                    <button type="button" class="change-quan">
+                      <span nz-icon nzType="plus" nzTheme="outline"></span>
+                    </button>
+                  </div>
+                  <div class="row gap-05 wrap-price">
+                    <span class="new-price">2,000,000đ</span>
+                    <div class="old-price">
+                      <span>1,950,000đ</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <span class="delete-product" nz-icon nzType="close" nzTheme="outline"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cart-infor">
+        <div class="wrap-order column gap-05">
+          <strong>ORDER SUMMARY</strong>
+          <div class="column">
+            <div class="row space-between">
+              <span>2 Items</span>
+              <span>6,200,000₫</span>
+            </div>
+            <div class="row space-between">
+              <span>Original price</span>
+              <span>6,200,000₫</span>
+            </div>
+            <div class="row space-between">
+              <span>Delivery</span>
+              <span>Free</span>
+            </div>
+            <div class="row space-between old-price" style="text-decoration: none;">
+              <span>On sale</span>
+              <span>- 1,600,000₫</span>
+            </div>
+          </div>
+          <div class="row space-between">
+            <strong>Total</strong>
+            <strong>1,600,000₫</strong>
+          </div>
+        </div>
+
+        <div class="payment-infor">
+        </div>
+
+        <button class="check-out">
+          <span>CHECK OUT</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!checkCart" class="wrapper-empty-cart column gap-05">
+    <h1>GIỎ HÀNG BẠN ĐANG TRỐNG</h1>
+    <button class="check-out continue">
+      <span>TIẾP TỤC MUA HÀNG</span>
+    </button>
+  </div>
+</div>
+

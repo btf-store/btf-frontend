@@ -92,12 +92,17 @@
 }
 
 .change-quan {
+  background-color: white;
   border: 1px solid #cbcbcb;
   padding: 5px 0;
   cursor: pointer;
   width: 25px;
   text-align: center;
   margin: auto;
+}
+
+.change-quan:hover {
+  border: 1px solid black;
 }
 
 .input-quantity{
@@ -186,6 +191,10 @@ app-product {
 .btn-view a:hover {
   background-color: black;
   color: white;
+}
+
+.more-des {
+  transition: transform 10s ease-out;
 }
 
 .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{

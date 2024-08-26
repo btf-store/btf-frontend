@@ -29,6 +29,7 @@ export class ProductDetailComponent {
   sizeValue: string = ''
   quantity: number = 1;
   listProduct = [1,2,3,4]
+  isShowMore: boolean = false;
 
   constructor(private router: Router){
   }
@@ -36,7 +37,7 @@ export class ProductDetailComponent {
   ngOnInit(): void {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        window.scrollTo(0, 0); // Cuộn về đầu trang
+        window.scrollTo(0, 0);
       }
     });
   }
@@ -64,5 +65,9 @@ export class ProductDetailComponent {
       }
     }
     this.quantity = this.quantity + value
+  }
+
+  showMore() {
+    this.isShowMore = true;
   }
 }

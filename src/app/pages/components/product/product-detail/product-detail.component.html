@@ -61,14 +61,13 @@
           <div class="quantity row gap-2 align-center">
             <span>Số lượng</span>
             <div class="row gap-05">
-              <div class="change-quan" (click)="changeQuantity(-1)">
+              <button type="button" class="change-quan" (click)="changeQuantity(-1)">
                 <span nz-icon nzType="minus" nzTheme="outline"></span>
-              </div>
-              <!-- <h2 style="margin-top: 5px;">{{quantity}}</h2> -->
+              </button>
               <input class="input-quantity" type="number" [value]="quantity">
-              <div class="change-quan" (click)="changeQuantity(1)">
+              <button type="button" class="change-quan" (click)="changeQuantity(1)">
                 <span nz-icon nzType="plus" nzTheme="outline"></span>
-              </div>
+              </button>
             </div>
           </div>
           <button type="submit" class="button-add">Thêm vào giỏ</button>
@@ -93,6 +92,7 @@
             Đức mang trên chân như Antoine Griezmann, Kyle Walker, Theo Hernández, Cody Gakpo, Memphis Depay, Christian
             Pulisic, Kingsley Coman...
           </p>
+
           <p class="text-des ">
             Thông số kỹ thuật
 
@@ -116,39 +116,42 @@
             khu vực cổ chân. Đặc biệt, trên phiên bản Ultra 5 Pro Cage lần này, phần lưỡi gà đã được thiết kế thoải mái
             hơn đáng kể, góp phần hạn chế tình trạng bó tức phần mu bàn chân của người chơi khi so với thế hệ trước.
           </p>
-          <p class="text-des ">
-            Lót giày làm từ chất liệu aerogel với công nghệ Ortholite® O-Therm™ hoàn toàn mới ​​giúp giữ cho đôi chân
-            luôn
-            mát mẻ và thoải mái trong mọi trận đấu. Đồng thời, chúng còn hạn chế tình trạng xê dịch của bàn chân trong
-            giày khi thi đấu ở cường độ cao.
+          <div *ngIf="isShowMore" class="more-des">
+            <p class="text-des ">
+              Lót giày làm từ chất liệu aerogel với công nghệ Ortholite® O-Therm™ hoàn toàn mới ​​giúp giữ cho đôi chân
+              luôn
+              mát mẻ và thoải mái trong mọi trận đấu. Đồng thời, chúng còn hạn chế tình trạng xê dịch của bàn chân trong
+              giày khi thi đấu ở cường độ cao.
 
-            Đệm gót giày làm từ vải nhung mềm mại tạo cảm giác ôm chân vừa vặn và thoải mái.
+              Đệm gót giày làm từ vải nhung mềm mại tạo cảm giác ôm chân vừa vặn và thoải mái.
 
-            Khung bọc gót chắc chắn với thiết kế ôm trọn mắt cá chân giúp hạn chế tình trạng nhấc gót khi thi đấu ở
-            cường
-            độ cao.
+              Khung bọc gót chắc chắn với thiết kế ôm trọn mắt cá chân giúp hạn chế tình trạng nhấc gót khi thi đấu ở
+              cường
+              độ cao.
 
-            Bộ đệm ProFoam Lite với cấu trúc êm ái và đàn hồi sẽ mang đến những bước chạy thanh thoát và linh hoạt hơn
-            cho
-            người chơi. Bên cạnh đó, chúng còn giúp hạn chế tối đa những phản lực từ bề mặt sân cứng tác động lên phần
-            gót
-            và các khớp cơ của người mang.
+              Bộ đệm ProFoam Lite với cấu trúc êm ái và đàn hồi sẽ mang đến những bước chạy thanh thoát và linh hoạt hơn
+              cho
+              người chơi. Bên cạnh đó, chúng còn giúp hạn chế tối đa những phản lực từ bề mặt sân cứng tác động lên phần
+              gót
+              và các khớp cơ của người mang.
 
-            Đế ngoài làm từ chất liệu cao su cao cấp với thiết kế đinh dạng cánh quạt mới giúp giảm trọng lượng, tăng độ
-            bám sân, và hỗ trợ khả năng xoay trở trong phạm vi không gian hẹp.
+              Đế ngoài làm từ chất liệu cao su cao cấp với thiết kế đinh dạng cánh quạt mới giúp giảm trọng lượng, tăng
+              độ
+              bám sân, và hỗ trợ khả năng xoay trở trong phạm vi không gian hẹp.
 
-            Phù hợp với thiên hướng sử dụng kỹ thuật, bứt tốc, rê dắt và sút bóng.
+              Phù hợp với thiên hướng sử dụng kỹ thuật, bứt tốc, rê dắt và sút bóng.
 
-            Trọng lượng tham khảo: 250 gam (size 41 - 26.5cm).
+              Trọng lượng tham khảo: 250 gam (size 41 - 26.5cm).
 
-            Bộ sưu tập: Formula Pack (07/2024).
-          </p>
-          <div class="wrap-list-image">
-            <div class="list-image-detail" *ngFor="let product of products; let i = index">
-              <img src="{{product}}">
+              Bộ sưu tập: Formula Pack (07/2024).
+            </p>
+            <div class="wrap-list-image">
+              <div class="list-image-detail" *ngFor="let product of products; let i = index">
+                <img src="{{product}}">
+              </div>
             </div>
           </div>
-          <div style="text-align: center; margin-top: 25px;" class="btn-view">
+          <div (click)="showMore()" style="text-align: center; margin-top: 25px;" class="btn-view">
             <a>Xem thêm</a>
           </div>
 
@@ -165,7 +168,7 @@
   <div style="width: 100%;">
     <h3 style="text-align: center; font-size: 25px;">SẢN PHẨM TƯƠNG TỰ</h3>
     <div class="row gap-2 wrap-product-relate">
-      <app-product *ngFor="let item of listProduct" ></app-product>
+      <app-product *ngFor="let item of listProduct"></app-product>
     </div>
 
     <div style="text-align: center; margin-top: 20px;" class="btn-view">

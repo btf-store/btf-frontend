@@ -11,6 +11,8 @@ import { ToastModule } from 'primeng/toast';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMenuModeType } from 'ng-zorro-antd/menu';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NavigationEnd, Router } from '@angular/router';
 
 
 @Component({
@@ -26,47 +28,51 @@ import { NzMenuModeType } from 'ng-zorro-antd/menu';
     ToastModule,
     CommonModule,
     NzGridModule,
-    NzIconModule
-
-],
+    NzIconModule,
+    NzBadgeModule
+  ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
-export class HeaderComponent{
+export class HeaderComponent {
   isNavbar: boolean = true;
   isCollapsed = true;
   maxWidth = window.innerWidth;
   nzMode: NzMenuModeType = 'horizontal';
 
-  toggleNavbar(){
+  constructor(
+    private router: Router
+  ) {}
+
+  toggleNavbar() {
     this.isNavbar = !this.isNavbar;
+    this.isCollapsed = !this.isCollapsed
   }
 
-  ngOnInit(){
-    console.log(this.isNavbar)
-    if(this.maxWidth < 1024){
-      this.nzMode = 'inline'
-      this.isNavbar = false
-    }
+  ngOnInit() {
+    this.checkScreenSize();
+
+    this.router.events.subscribe(
+      (event) => {
+        if (event instanceof NavigationEnd) {
+          this.checkScreenSize()
+        }
+      }
+    )
   }
 
   @HostListener('window:resize', ['$event'])
   onResize() {
-    console.log(this.isNavbar)
-    this.maxWidth = window.innerWidth;
     this.checkScreenSize();
   }
 
-  checkScreenSize(){
-    if(this.maxWidth < 1024){
+  checkScreenSize() {
+    if (window.innerWidth < 1024) {
       this.nzMode = 'inline'
       this.isNavbar = false
-    }else{
-      this.isNavbar = true
-    }
-
-    if(this.maxWidth >= 1024){
+    } else {
       this.nzMode = 'horizontal'
+      this.isNavbar = true
     }
   }
 }
