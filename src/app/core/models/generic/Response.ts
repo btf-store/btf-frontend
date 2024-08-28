@@ -1,0 +1,7 @@
+import { PaginationResponse } from "./PaginationResponse";
+
+export interface Response<T> {
+  statusCode: number,
+  message: string,
+  data: PaginationResponse<T> | T | T[]
+}

@@ -1,6 +1,29 @@
 <div class="wrapper column">
   <app-slider></app-slider>
-  <div class="row gap-2 wrap-product">
-    <app-product *ngFor="let item of listProduct" (click)="navigate('product-detail')"></app-product>
+  <!-- <h3>Tất cả sản phẩm</h3> -->
+  <div #allProduct class="product-title">
+    <nz-divider nzText="TẤT CẢ SẢN PHẨM" nzOrientation="left"></nz-divider>
   </div>
+  <div  class="gap-1 wrap-product-filter row">
+    <div class="wrap-filter">
+      <app-filter-product></app-filter-product>
+    </div>
+    <div  class="wrap-all-product column gap-1">
+      <div class="row gap-2 wrap-product">
+        <app-product *ngFor="let product of products" [product]="product"></app-product>
+      </div>
+      <div class="pagination">
+        <nz-pagination
+        (nzPageIndexChange)="onPageIndexChange($event)"
+        [(nzPageIndex)]="pageNumber"
+        [nzTotal]="totalElement"
+        [nzSize]="nzSize" nzShowSizeChanger
+        [nzPageSize]="pageSize"
+        [nzPageSizeOptions]="pageSizeOption"
+        (nzPageSizeChange)="onPageSizeChange($event)"
+        ></nz-pagination>
+      </div>
+    </div>
+  </div>
+
 </div>

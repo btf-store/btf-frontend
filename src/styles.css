@@ -123,4 +123,29 @@ input[type=number]::-webkit-outer-spin-button {
   }
 }
 
+.p-paginator-rpp-options .p-dropdown .p-component .p-inputwrapper .p-inputwrapper-filled{
+  display: none;
+}
 
+/*
+.ant-slider-track {
+  background-color: black;
+}
+
+.ant-slider .ng-untouched .ng-valid .ng-dirty:hover{
+  color: red;
+  background-color: black;
+}
+.ant-slider-handle{
+  background-color: white;
+  border: 1px solid black;
+}
+
+.ant-slider-handle:hover{
+  border: 1px solid black;
+  color: black;
+}
+
+.ant-slider-handle::selection{
+  background-color: red;
+}*/

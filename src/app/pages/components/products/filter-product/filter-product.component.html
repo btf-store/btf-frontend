@@ -1,0 +1,127 @@
+<div class="wrapper gap-2 column">
+  <div class="wrap-first column gap-2">
+    <div class="wrap-front column gap-05">
+      <h3>SẮP XẾP</h3>
+      <select [(ngModel)]="sortedValue" class="sort-select" name="" id="" (ngModelChange)="onSortSelected(sortedValue)">
+        <option default disabled selected value="">Sản phẩm nổi bật</option>
+        <option value="price asc">Giá: Tăng dần</option>
+        <option value="price desc">Giá: Giảm dần</option>
+        <option value="name asc">Tên: A-Z</option>
+        <option value="">Tên: Z-A</option>
+        <option value="5">Mới nhất</option>
+        <option value="6">Bán chạy nhất</option>
+      </select>
+    </div>
+
+    <div class="wrap-front column">
+      <h3>GIÁ</h3>
+      <nz-slider [nzMin]="minValue" [nzMax]="maxValue" nzStep="500000" nzRange [(ngModel)]="value"
+      [nzTipFormatter]="onValueChange()"
+      ></nz-slider>
+      <div class="row gap-05">
+        <span>{{ value[0] | money }}</span> - <span>{{ value[1] | money }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap-second column gap-2">
+    <div class="wrap-behind column gap-05">
+      <div class="wrap-box-head row align-center space-between">
+        <h3>THƯƠNG HIỆU</h3>
+        <div class="button-container">
+          <button
+          class="button-change"
+          (click)="toggleBoxBranch()"
+          >
+            <span *ngIf="!checkedBoxBranch"   nz-icon nzType="plus" nzTheme="outline"></span>
+            <span *ngIf="checkedBoxBranch" nz-icon nzType="minus" nzTheme="outline"></span>
+          </button>
+        </div>
+      </div>
+      <div [ngClass]="{ 'wrap-checkbox column gap-05': true, 'open': checkedBoxBranch }">
+        <div class="row gap-1">
+          <input class="checkbox" type="checkbox" />
+          <span>NIKE</span>
+        </div>
+        <div class="row gap-1">
+          <input class="checkbox" type="checkbox"/>
+          <span>ADIDAS</span>
+        </div>
+        <div class="row gap-1">
+          <input class="checkbox" type="checkbox" />
+          <span>PUMA</span>
+        </div>
+        <div class="row gap-1">
+          <input class="checkbox" type="checkbox" />
+          <span>MIZUNO</span>
+        </div>
+        <div class="row gap-1">
+          <input class="checkbox" type="checkbox" />
+          <span>JOMA</span>
+        </div>
+        <div class="row gap-1">
+          <input class="checkbox" type="checkbox" />
+          <span>DESPORTE</span>
+        </div>
+        <div class="row gap-1">
+          <input class="checkbox" type="checkbox" />
+          <span>ASICS</span>
+        </div>
+        <div class="row gap-1">
+          <input class="checkbox" type="checkbox" />
+          <span>KAMITO</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap-behind column gap-05">
+      <div class="wrap-box-head row align-center space-between">
+        <h3>SIZE</h3>
+        <div class="button-container">
+          <button
+          class="button-change"
+          (click)="toggleBoxSize()"
+          >
+            <span *ngIf="!checkedBoxSize"   nz-icon nzType="plus" nzTheme="outline"></span>
+            <span *ngIf="checkedBoxSize" nz-icon nzType="minus" nzTheme="outline"></span>
+          </button>
+        </div>
+      </div>
+      <div [ngClass]="{ 'wrap-checkbox column gap-05': true, 'open': checkedBoxSize }">
+        <div class="row gap-1">
+          <input class="checkbox" type="checkbox" />
+          <span>39</span>
+        </div>
+        <div class="row gap-1">
+          <input class="checkbox" type="checkbox"/>
+          <span>40</span>
+        </div>
+        <div class="row gap-1">
+          <input class="checkbox" type="checkbox" />
+          <span>41</span>
+        </div>
+        <div class="row gap-1">
+          <input class="checkbox" type="checkbox" />
+          <span>42</span>
+        </div>
+        <div class="row gap-1">
+          <input class="checkbox" type="checkbox" />
+          <span>43</span>
+        </div>
+        <div class="row gap-1">
+          <input class="checkbox" type="checkbox" />
+          <span>44</span>
+        </div>
+        <div class="row gap-1">
+          <input class="checkbox" type="checkbox" />
+          <span>45</span>
+        </div>
+        <div class="row gap-1">
+          <input class="checkbox" type="checkbox" />
+          <span>46</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

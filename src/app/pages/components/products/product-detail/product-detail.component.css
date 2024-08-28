@@ -1,0 +1,315 @@
+
+.wrap-product  {
+  padding: 0 100px;
+  /* position: relative; */
+}
+
+.wrap-image {
+  width: 50%;
+  max-height: 400px;
+  overflow: hidden;
+  justify-content: flex-end;
+}
+
+.wrap-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  width: auto;
+  height: auto;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+  transition: transform 0.5s ease-in-out;
+}
+
+.list-image {
+  width: 80px;
+  height: 90%;
+  /* flex-direction: row; */
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.list-image img {
+  cursor: pointer;
+}
+
+.list-image::-webkit-scrollbar{
+  display: none;
+}
+
+.pi {
+  font-size: 1.5rem;
+}
+
+.slick-next{
+  width: 100%;
+  border: 0.5px solid rgb(175, 175, 175);
+  text-align: center;
+  background-color: #f1f1f1;
+  cursor: pointer;
+}
+
+.new-price {
+  font-size: x-large;
+  font-weight: 500;
+  color: #d71c36;
+}
+
+.old-price {
+  align-items: center;
+  font-size: 22px;
+  font-weight: 300;
+  color: rgb(169, 175, 181);
+  text-decoration: line-through;
+  height: 34px;
+}
+.wrap-infor {
+  width: 45%;
+}
+
+.ant-radio-button-wrapper {
+  width: 60px;
+  margin: 2px 4px ;
+}
+
+
+
+.prd-description {
+  font-weight: 600;
+  color: #d71c36;
+}
+
+ .button-add {
+  margin-top: 10px;
+  padding: 8px;
+  width: 60%;
+  height: 100%;
+  background-color: #d71c36;
+  border: 0;
+  color: white;
+  cursor: pointer;
+  user-select: none;
+}
+
+.change-quan {
+  background-color: white;
+  border: 1px solid #cbcbcb;
+  padding: 5px 0;
+  cursor: pointer;
+  width: 25px;
+  text-align: center;
+  margin: auto;
+}
+
+.change-quan:hover {
+  border: 1px solid black;
+}
+
+.input-quantity{
+  width: 40px;
+  text-align: center;
+  border: none;
+  font-weight: 500;
+  font-size: x-large;
+}
+
+.ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)  {
+  border: 2px solid black;
+  box-shadow: none;
+  background: none;
+  color: black;
+}
+
+.ant-radio-button-wrapper:hover {
+  color: black;
+}
+
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)::before {
+  background-color: black;
+}
+
+.wrap-detail {
+  padding: 5px;
+  margin: 30px auto 0;
+  width: 70%;
+}
+
+.wrap-detail h1 {
+  text-align: center;
+}
+
+.text-des {
+  text-align: justify;
+  font-size: 14px;
+  line-height: 30px;
+  margin-bottom: 15px;
+  /* max-height: 360px; */
+}
+
+.wrap-list-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  width: auto;
+  height: auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.list-image-detail img {
+  width: 100%;
+}
+
+
+.wrap-product-relate {
+  padding: 10px;
+  max-width: 1030px;
+  align-items: center;
+  /* height: 100%; */
+  align-items: center;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  /* width: 378px; */
+}
+
+app-product {
+  max-width: 250px;
+}
+
+.btn-view a {
+  padding: 10px 30px;
+  border: 1px solid black;
+  background-color: white;
+  transition: background-color 0.5s ease, transform 0.3s ease;
+  text-decoration: none;
+  color: black;
+}
+
+.btn-view a:hover {
+  background-color: black;
+  color: white;
+}
+
+.more-des {
+  overflow: hidden;
+  max-height: 300px;
+  transition: max-height 1s ease-in-out;
+  position: relative;
+}
+
+ .more-des::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  background: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+  pointer-events: none;
+}
+
+.more-open {
+  max-height: 3000px;
+}
+
+.more-open::after {
+  display: none;
+}
+
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
+  color: white;
+  background-color: black;
+}
+
+.ant-radio-button-wrapper[_ngcontent-ng-c799779927]{
+  margin: 0;
+  width: 70px;
+  text-align: center;
+}
+
+
+.wrap-size {
+   display: flex;
+   flex-wrap: wrap;
+  gap: 0.5rem
+}
+
+.main-image {
+  cursor: zoom-in;
+}
+
+@media (max-width: 1024px) {
+  .wrap-image{
+    flex-direction: column-reverse;
+    width: 50%;
+    max-height: 600px;
+  }
+
+  .list-image {
+    width: 100%;
+    height: 90px;
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    /* white-space: nowrap; */
+  }
+
+  .wrap-detail {
+    margin-top: 10px;
+  }
+
+  .slick-next{
+    display: none;
+  }
+
+  .wrap-product-relate {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+
+@media (max-width: 700px) {
+
+  .wrap-product-relate {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 90%;
+  }
+
+  .wrap-product{
+    flex-direction: column;
+    padding: 10px;
+    width: 100%;
+  }
+
+  .wrap-image {
+    width: 100%;
+    max-height: 520px;
+  }
+
+  .list-image {
+    width: 500px;
+  }
+
+  .wrap-infor {
+    width: 100%;
+  }
+
+  .add-cart{
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+  }
+
+  .button-add {
+    margin: 0;
+    width: 50%;
+  }
+
+  .wrap-detail {
+    width: 90%;
+  }
+}

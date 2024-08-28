@@ -27,6 +27,7 @@
   object-fit: cover;
   width: 100%;
   height: 100%;
+  cursor: pointer;
 }
 
 .wrap-product-infor{
@@ -62,6 +63,7 @@
 
 .text-infor strong {
   font-size: 18px;
+  cursor: pointer;
 }
 
 .wrap-price {
@@ -116,7 +118,7 @@
 }
 
 .continue  {
-  width: 30%;
+  width: 20%;
 }
 
 @media (max-width: 1024px) {
@@ -136,6 +138,10 @@
 
   .text-infor strong {
     font-size: 16px;
+  }
+
+  .continue  {
+    width: 30%;
   }
 }
 
@@ -190,7 +196,7 @@
   }
 
   .continue  {
-    width: 50%;
+    width: 40%;
   }
 
   .wrapper {

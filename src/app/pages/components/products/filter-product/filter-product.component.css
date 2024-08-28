@@ -1,0 +1,56 @@
+.wrapper {
+  padding: 10px;
+}
+
+.sort-select{
+  width: 100%;
+  padding: 8px;
+}
+
+.wrap-box-head button{
+  background-color: white;
+  border: none;
+  font-size: large;
+  cursor: pointer;
+}
+
+.checkbox {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+}
+
+.wrap-checkbox{
+  margin-top: 5px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+}
+
+.open{
+  max-height: 500px;
+}
+
+@media (max-width: 1025px) {
+  .wrapper {
+    padding-top: 0;
+  }
+
+  .wrap-first {
+    flex-direction: row-reverse;
+  }
+
+  .wrap-second{
+    flex-direction: row;
+  }
+
+  .wrap-front{
+    width: 50%;
+  }
+
+  .wrap-behind{
+    width: 50%;
+  }
+
+}
+

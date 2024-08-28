@@ -22,11 +22,11 @@ export class SliderComponent {
   ingredient: string = "a"
 
 
-  // ngOnInit(): void {
-  //   setInterval(() => {
-  //     this.nextImage();
-  //   }, this.intervalTime);
-  // }
+  ngOnInit(): void {
+    setInterval(() => {
+      this.nextImage();
+    }, this.intervalTime);
+  }
 
   nextImage(): void {
     if (this.currentIndex < this.images.length - 1) {

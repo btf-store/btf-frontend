@@ -1,0 +1,30 @@
+<div (click)="navigate('product-detail', product.productColorId)" class="wrapper gap-05 column">
+  <div class="wrap-image">
+    <div class="wrap-head row">
+      @if(product.priceList[1] != undefined){
+      <div class="wrap-head-item wrap-sale">
+        <span>20%</span>
+      </div>
+      }
+      <!-- <div class="wrap-head-item wrap-new">
+        <span>Mới ra mắt</span>
+      </div> -->
+    </div>
+    <div [@imageState]="imageLoaded ? 'loaded' : 'loading'">
+      <img  class="image" [src]="product.imageList[0]" alt="productImage" loading="lazy" (load)="onImageLoad()">
+    </div>
+  </div>
+  <!-- style="margin-bottom: 0; height: 60px;" -->
+  <h4 class="productName" >{{product.productName}}</h4>
+
+  <div class="row gap-05 wrap-price">
+    <span class="new-price">{{product.priceList[0].value | money}}</span>
+    @if(product.priceList[1] != undefined){
+    <div class="old-price">
+      <span>
+        {{product.priceList[1].value | money}}
+      </span>
+    </div>
+    }
+  </div>
+</div>
