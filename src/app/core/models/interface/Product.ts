@@ -1,4 +1,4 @@
-import { branchType } from "./Branch"
+import { BranchType } from "./Branch"
 import { Price } from "./Price"
 
 export interface Product {
@@ -6,10 +6,10 @@ export interface Product {
   productName: string,
   color: string,
   category: string,
-  brandName: string,
-  branchType?: branchType,
+  onSales?:boolean,
+  branchType?: BranchType,
   imageList: string[],
   priceList: Price[]  | [],
-  sizeList: [],
+  sizeList: string[],
   description: string
 }

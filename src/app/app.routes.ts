@@ -3,6 +3,8 @@ import { UserComponent } from './pages/layouts/user/user.component';
 import { HomeComponent } from './pages/components/home/home.component';
 import { ProductDetailComponent } from './pages/components/products/product-detail/product-detail.component';
 import { CartComponent } from './pages/components/cart/cart.component';
+import { AdminComponent } from './pages/layouts/admin/admin.component';
+import { ProductListComponent } from './pages/components/products/product-list/product-list.component';
 
 export const routes: Routes = [
   // { path: '', pathMatch: 'full', redirectTo: '/welcome' },
@@ -25,5 +27,15 @@ export const routes: Routes = [
       }
     ]
   },
+  {
+    path: 'admin-dashboard',
+    component: AdminComponent,
+    children: [
+      {
+        path: '',
+        component: ProductListComponent
+      }
+    ]
+  }
 
 ];

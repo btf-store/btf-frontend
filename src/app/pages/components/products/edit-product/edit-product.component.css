@@ -1,0 +1,55 @@
+.wrapper {
+  font-weight: bold;
+}
+
+
+.input-infor {
+  box-shadow: none;
+  border: none;
+  cursor: default;
+}
+
+.input-open {
+  border: 1px solid #e9eaeb;
+  cursor: text;
+}
+
+.input-open:hover {
+  border: 1px solid #4096ff;
+  box-shadow: #4096ff;
+}
+
+.input-open:focus {
+  border: 1px solid #4096ff;
+  box-shadow: #4096ff;
+}
+
+nz-form-label{
+  font-weight: 550;
+}
+
+.button-add {
+  color: white;
+    height: 31px;
+    width: 31px;
+    background-color: #4096ff;
+    border: 1px solid #4096ff;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.5s ease;
+    font-size: 1.2rem;
+}
+
+.wrap-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  overflow: hidden;
+  margin: auto;
+}
+
+.wrap-image img {
+  width: 100%;
+  height: 100%;
+  cursor: zoom-in;
+}

@@ -6,7 +6,10 @@
   </div>
   <div  class="gap-1 wrap-product-filter row">
     <div class="wrap-filter">
-      <app-filter-product></app-filter-product>
+      <app-filter-product
+      (onSelectedChange)="selectedChange($event)"
+      (onPriceChange)="priceChange($event)"
+      ></app-filter-product>
     </div>
     <div  class="wrap-all-product column gap-1">
       <div class="row gap-2 wrap-product">

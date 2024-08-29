@@ -17,7 +17,7 @@ export class ProductService {
     private apiService: ApiService,
   ) { }
 
-  getFilteredProduct(params: RequestParams): Observable<Response<Product>> {
+  getFilteredProduct(params?: RequestParams): Observable<Response<Product>> {
     return this.apiService.get(this.url, {
       params: params,
       responseType: 'json'
@@ -35,5 +35,11 @@ export class ProductService {
       params: params,
       responseType: 'json'
     });
+  }
+
+  searchProduct(keySearch: string): Observable<Response<Product>> {
+    return this.apiService.get(this.url.concat(`/search`), {
+      responseType: 'json'
+    })
   }
 }

@@ -1,0 +1,83 @@
+<div class="wrapper">
+  <div class="fillter row gap-2">
+    <div class="option-filter row gap-2">
+      <span style="text-align: center;" nz-icon nzType="search" nzTheme="outline"></span>
+      <div class="input-search">
+        <input nz-input placeholder="Nhập thông tin" nzSize="large" />
+      </div>
+    </div>
+    <div>
+      <select class="select-sort" name="" id="">
+        <option value="1" disabled>Sắp xếp</option>
+        <option value="2">Giá tăng dần</option>
+        <option value="3">Giá giảm dần</option>
+        <option value="4">Giảm giá</option>
+      </select>
+    </div>
+      <button class="button-add" (click)="togglePopupCreate()">
+        <span nz-icon nzType="plus" nzTheme="outline"></span>
+      </button>
+  </div>
+  <div class="wrap-table">
+    <nz-table #basicTable [nzData]="products" (nzPageIndexChange)="scrollTopPage()">
+      <thead>
+        <tr>
+          <th>Mã SP</th>
+          <th>Tên sản phẩm</th>
+          <th>Thương hiệu</th>
+          <th>Loại</th>
+          <th>Giá</th>
+          <th>Chương trình</th>
+          <th>Hình ảnh</th>
+          <th>Chi tiết</th>
+          <th>Sửa giá</th>
+          <th>Sửa hình</th>
+          <th>Xóa</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (data of basicTable.data; track data) {
+        <tr>
+          <td>
+            {{data.productColorId}}
+          </td>
+          <td>
+            {{data.productName}}
+          </td>
+          <td>
+            {{data.branchType?.branch?.branchName}}
+          </td>
+          <td>
+            {{data.category }}
+          </td>
+          <td>
+            {{data.priceList[0].value | money}}
+          </td>
+          <td>
+            {{data.onSales ? 'Đang giảm giá': 'N/A'}}
+          </td>
+          <td>
+            <div class="wrap-image">
+              <img src="{{data.imageList[0]}}" alt="">
+            </div>
+          </td>
+          <td class="wrap-icon">
+            <span class="icon-action icon-view" nz-icon nzType="eye" nzTheme="outline" (click)="viewProductDetail(data)"></span>
+          </td>
+          <td class="wrap-icon">
+            <span class="icon-action icon-price" nz-icon nzType="money-collect" nzTheme="outline" ></span>
+          </td>
+          <td class="wrap-icon">
+            <span class="icon-action icon-image" nz-icon nzType="file-image" nzTheme="outline" ></span>
+          </td>
+          <td class="wrap-icon">
+            <span class="icon-action icon-delete" nz-icon nzType="delete" nzTheme="outline"></span>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </nz-table>
+  </div>
+</div>
+<app-edit-product [isEdit]="isEdit" [visible]="visible" (onClosePopup)="togglePopupEdit()" [product]="productDetail"></app-edit-product>
+

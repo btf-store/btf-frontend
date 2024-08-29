@@ -2,21 +2,21 @@
   <div class="wrap-first column gap-2">
     <div class="wrap-front column gap-05">
       <h3>SẮP XẾP</h3>
-      <select [(ngModel)]="sortedValue" class="sort-select" name="" id="" (ngModelChange)="onSortSelected(sortedValue)">
+      <select [(ngModel)]="selectedValue" class="sort-select" name="" id="" (ngModelChange)="onSortSelected(selectedValue)">
         <option default disabled selected value="">Sản phẩm nổi bật</option>
-        <option value="price asc">Giá: Tăng dần</option>
-        <option value="price desc">Giá: Giảm dần</option>
-        <option value="name asc">Tên: A-Z</option>
-        <option value="">Tên: Z-A</option>
-        <option value="5">Mới nhất</option>
-        <option value="6">Bán chạy nhất</option>
+        <option value='{"sortBy": "onSales", "isAsceding": "true"}'>Giảm giá</option>
+        <option value='{"sortBy": "price", "isAsceding": "true"}'>Giá: Tăng dần</option>
+        <option value='{"sortBy": "price", "isAsceding": "false"}'>Giá: Giảm dần</option>
+        <option value='{"sortBy": "productName", "isAsceding": "true"}'>Tên: A-Z</option>
+        <option value='{"sortBy": "productName", "isAsceding": "false"}'>Tên: Z-A</option>
+        <option disabled value="">Bán chạy nhất</option>
       </select>
     </div>
-
+    <!-- [nzTipFormatter]="onValueChange()" -->
     <div class="wrap-front column">
       <h3>GIÁ</h3>
       <nz-slider [nzMin]="minValue" [nzMax]="maxValue" nzStep="500000" nzRange [(ngModel)]="value"
-      [nzTipFormatter]="onValueChange()"
+      (nzOnAfterChange)="onAfterChange(value[0],  value[1])"
       ></nz-slider>
       <div class="row gap-05">
         <span>{{ value[0] | money }}</span> - <span>{{ value[1] | money }}</span>
@@ -40,7 +40,7 @@
       </div>
       <div [ngClass]="{ 'wrap-checkbox column gap-05': true, 'open': checkedBoxBranch }">
         <div class="row gap-1">
-          <input class="checkbox" type="checkbox" />
+          <input class="checkbox" type="checkbox"/>
           <span>NIKE</span>
         </div>
         <div class="row gap-1">

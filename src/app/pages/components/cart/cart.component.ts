@@ -17,7 +17,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 })
 export class CartComponent {
   cartItems = [1,2,3,4]
-  checkCart: boolean = true;
+  checkCart: boolean = false;
 
   constructor(
     private router: Router

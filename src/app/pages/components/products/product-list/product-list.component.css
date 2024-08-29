@@ -1,0 +1,88 @@
+.wrapper{
+  width: 100%;
+  padding: 20px;
+  /* object-fit: contain; */
+  background-color: rgb(240, 243, 243);
+}
+
+.fillter {
+  height: 40px;
+  width: 70%;
+  margin: 30px auto ;
+}
+
+.wrap-table {
+  width: 95%;
+  margin: 50px auto ;
+}
+
+.option-filter {
+  max-width: 100%;
+}
+
+.option-filter span {
+  font-size: 1.5rem;
+}
+
+.input-search {
+  width: 450px;
+  /* margin: auto; */
+}
+
+.select-sort {
+  height: 100%;
+  width: 200px;
+  padding: 10px;
+  border: 1px solid rgb(191, 191, 191);
+}
+
+.icon-action {
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+.wrap-icon {
+  text-align: center;
+}
+
+.icon-view  {
+  color: #4096ff;
+}
+
+.icon-price {
+  color: darkgreen;
+}
+
+.icon-image {
+  color: darksalmon;
+}
+.icon-delete {
+  color: red;
+}
+
+.wrap-image {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  overflow: hidden;
+}
+
+.wrap-image img {
+  width: 100%;
+}
+
+.button-add {
+  width: 90px;
+  cursor: pointer;
+  height: 100%;
+  font-size: large;
+  background-color: white;
+  color: #4096ff;
+  border: 1px solid #4096ff;
+  transition: background-color 0.4s ease;
+}
+
+.button-add:hover {
+  background-color: #4096ff;
+  color: white;
+}

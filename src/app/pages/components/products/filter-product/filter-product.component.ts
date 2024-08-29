@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NzInputNumberComponent } from 'ng-zorro-antd/input-number';
 import { NzSliderComponent } from 'ng-zorro-antd/slider';
@@ -28,12 +28,16 @@ import { CommonModule, NgClass } from '@angular/common';
 })
 export class FilterProductComponent {
   minValue: number = 0;
-  maxValue: number = 10000000;
+  maxValue: number = 5000000;
   value = [this.minValue,  this.maxValue]
+  value2 = []
   checkedBoxBranch = true;
   checkedBoxSize = true;
+  @Input() selectedValue: string = ""
+  @Output() onPriceChange = new EventEmitter<[number, number]>()
+  @Output() onSelectedChange = new EventEmitter<string>()
 
-  sortedValue: string = ''
+
 
   constructor(private moneyPipe: MoneyPipe){}
 
@@ -47,6 +51,11 @@ export class FilterProductComponent {
     };
   }
 
+  onAfterChange(minValue:number, maxValue:number) {
+      //  this.moneyPipe.transform(newValue)
+       this.onPriceChange.emit([minValue, maxValue])
+  }
+
   toggleBoxBranch(){
     this.checkedBoxBranch = !this.checkedBoxBranch
   }
@@ -55,7 +64,11 @@ export class FilterProductComponent {
     this.checkedBoxSize = !this.checkedBoxSize
   }
 
-  onSortSelected(value: string){
-    console.log(value)
+  onSortSelected(selectedValue: string){
+    this.onSelectedChange.emit(selectedValue)
+  }
+
+  onSelectedBranch(branchId: number){
+
   }
 }

@@ -56,7 +56,6 @@ export class ProductDetailComponent {
     productName: '',
     color: '',
     category: '',
-    brandName: '',
     imageList: [],
     priceList: [{
       value: 0
