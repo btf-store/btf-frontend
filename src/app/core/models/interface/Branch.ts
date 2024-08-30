@@ -1,6 +1,7 @@
-export interface BranchType {
-  branchTypeId: number,
-  branchTypeName: string,
+export interface ProductLine {
+  productLineId: number,
+  productLineName: string,
+  description: string
   branch: Branch
 }
 

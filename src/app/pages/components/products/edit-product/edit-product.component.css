@@ -40,6 +40,11 @@ nz-form-label{
     font-size: 1.2rem;
 }
 
+.add-price {
+  width: 150px;
+  font-size: 14px;
+}
+
 .wrap-image {
   width: 100px;
   height: 100px;

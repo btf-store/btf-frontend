@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { AvatarModule } from 'primeng/avatar';
 
@@ -7,7 +8,8 @@ import { AvatarModule } from 'primeng/avatar';
   standalone: true,
   imports: [
     NzMenuModule,
-    AvatarModule
+    AvatarModule,
+    RouterLink
   ],
   templateUrl: './header-admin.component.html',
   styleUrl: './header-admin.component.css'

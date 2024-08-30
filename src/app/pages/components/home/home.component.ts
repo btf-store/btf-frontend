@@ -13,6 +13,7 @@ import { Response } from '../../../core/models/generic/Response';
 import { Product } from '../../../core/models/interface/Product';
 import { PaginationResponse } from '../../../core/models/generic/PaginationResponse';
 import { RequestParams } from '../../../core/models/interface/request/RequestParams';
+import { HttpHeaders } from '@angular/common/http';
 
 
 
@@ -32,10 +33,10 @@ import { RequestParams } from '../../../core/models/interface/request/RequestPar
 })
 export class HomeComponent {
   @ViewChild("allProduct") elementProducts!: ElementRef
-  sortBy: string = 'on_sales'
+  sortBy: string = 'salePercent'
   nzSize: NzSizeDSType = "default";
   productName: string = ''
-  branchTypeId: number = 0
+  productLineId: number = 0
   priceFrom: number = 0;
   priceTo: number = 0;
   categoryId: number = 0;
@@ -83,12 +84,13 @@ export class HomeComponent {
       page: this.pageNumber - 1,
       pageSize: this.pageSize,
       productName: this.productName,
-      branchTypeId: this.branchTypeId,
+      productLineId: this.productLineId,
       priceFrom: this.priceFrom,
       priceTo: this.priceTo,
       categoryId: this.categoryId,
       sortBy: this.sortBy,
       isAscending: this.isAscending
+
     }
     this.productService.getFilteredProduct(requestParam).subscribe({
       next: (response: Response<Product>) => {

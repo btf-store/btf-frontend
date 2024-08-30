@@ -52,7 +52,7 @@ import { NzImageService } from 'ng-zorro-antd/image';
 })
 export class ProductDetailComponent {
   product: Product = {
-    productColorId: 0,
+    productId: 0,
     productName: '',
     color: '',
     category: '',
@@ -61,7 +61,6 @@ export class ProductDetailComponent {
       value: 0
     }],
     sizeList: [],
-    description: ''
   }
   productsRelate: Product[] = []
   countImageLoad = 0;
@@ -104,17 +103,19 @@ export class ProductDetailComponent {
     this.productService.getProductById(id).subscribe({
       next: (response: Response<Product>) => {
           this.product = response.data as Product
-          if(this.product.branchType !== undefined){
-            this.getProductRelate(this.product.branchType?.branch.branchId)
+          if(this.product.productLine !== undefined){
+            this.getProductRelate(this.product.productLine?.branch.branchId, this.product.productId)
           }
       },
       error: () => this.router.navigateByUrl('')
     })
   }
 
-  getProductRelate(branchId: number){
+  getProductRelate(branchId: number, productColorId: number){
+    console.log("productRelate")
     const param: RequestParams = {
-      branchId: branchId
+      branchId: branchId,
+      productColorId: productColorId
     }
     this.productService.getRelateProducts(param).subscribe({
       next: (response: Response<Product>) => {

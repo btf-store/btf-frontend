@@ -7,6 +7,7 @@ import { error } from '@ant-design/icons-angular';
 import { Observable } from 'rxjs';
 import { Product } from '../../models/interface/Product';
 import { RequestParams } from '../../models/interface/request/RequestParams';
+import { HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,7 @@ export class ProductService {
   ) { }
 
   getFilteredProduct(params?: RequestParams): Observable<Response<Product>> {
+
     return this.apiService.get(this.url, {
       params: params,
       responseType: 'json'

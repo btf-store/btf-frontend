@@ -12,6 +12,7 @@ import { Product } from '../../../../core/models/interface/Product';
 import { Response } from '../../../../core/models/generic/Response';
 import { MoneyPipe } from '../../../../shared/pipes/money.pipe';
 import { Router } from '@angular/router';
+import { EditImageComponent } from "../../image/edit-image/edit-image.component";
 
 @Component({
   selector: 'app-product-list',
@@ -24,21 +25,23 @@ import { Router } from '@angular/router';
     NzInputModule,
     NzIconModule,
     EditProductComponent,
-    MoneyPipe
+    MoneyPipe,
+    EditImageComponent
 ],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css'
 })
 export class ProductListComponent{
   isEdit:boolean = false;
-  visible: boolean = false;
+  visibleEditProduct: boolean = false;
+  visibleEditImage: boolean = false;
   selectedProvince = 'Zhejiang'
   provinceData = ['Zhejiang', 'Jiangsu']
 
   listOfData = [ ];
   products: Product[] = []
   productDetail: Product = {
-    productColorId: 0,
+    productId: 0,
     productName: '',
     color: '',
     category: '',
@@ -47,7 +50,6 @@ export class ProductListComponent{
       value: 0
     }],
     sizeList: [],
-    description: ''
   }
 
   constructor(
@@ -61,19 +63,23 @@ export class ProductListComponent{
 
   viewProductDetail(product: Product){
     this.isEdit = true;
-    this.visible = !this.visible
+    this.visibleEditProduct = !this.visibleEditProduct
     this.productDetail = product
   }
 
   togglePopupEdit(){
-    this.visible = !this.visible
+    this.visibleEditProduct = !this.visibleEditProduct
+  }
+
+  togglePopupEditImage(){
+    this.visibleEditImage = !this.visibleEditImage
   }
 
   togglePopupCreate() {
     this.isEdit = false;
-    this.visible = !this.visible
+    this.visibleEditProduct = !this.visibleEditProduct
     this.productDetail = {
-      productColorId: 0,
+      productId: 0,
       productName: '',
       color: '',
       category: '',
@@ -82,7 +88,6 @@ export class ProductListComponent{
         value: 0
       }],
       sizeList: [],
-      description: ''
     }
   }
 
@@ -99,6 +104,11 @@ export class ProductListComponent{
 
   scrollTopPage(){
     window.scrollTo(0, 0);
+  }
+
+  editImage(product: Product) {
+    this.visibleEditImage = !this.visibleEditImage;
+    this.productDetail = product
   }
 
 }

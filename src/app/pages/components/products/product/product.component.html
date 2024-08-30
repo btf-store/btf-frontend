@@ -1,9 +1,9 @@
-<div (click)="navigate('product-detail', product.productColorId)" class="wrapper gap-05 column">
+<div (click)="navigate('product-detail', product.productId)" class="wrapper gap-05 column">
   <div class="wrap-image">
     <div class="wrap-head row">
-      @if(product.priceList[1] != undefined){
+      @if(product.salePercent !== 0){
       <div class="wrap-head-item wrap-sale">
-        <span>20%</span>
+        <span>{{product.salePercent}}%</span>
       </div>
       }
       <!-- <div class="wrap-head-item wrap-new">
@@ -11,7 +11,7 @@
       </div> -->
     </div>
     <div [@imageState]="imageLoaded ? 'loaded' : 'loading'">
-      <img  class="image" [src]="product.imageList[0]" alt="productImage" loading="lazy" (load)="onImageLoad()">
+      <img  class="image" [src]="product.imageList[0].imageUrl" alt="productImage" loading="lazy" (load)="onImageLoad()">
     </div>
   </div>
   <!-- style="margin-bottom: 0; height: 60px;" -->

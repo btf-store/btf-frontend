@@ -1,0 +1,42 @@
+<nz-modal [(nzVisible)]="visible" nzTitle="Thêm giá mới" (nzOnCancel)="onClose()" (nzOnOk)="onSubmit()"
+      nz-popconfirm
+      nzPopconfirmTitle="Are you sure?"
+      nzOkText="ok"
+      nzCancelText="cancel"
+      (nzOnConfirm)="onSubmit()"
+>
+  <ng-container *nzModalContent>
+    <form>
+      <div class="column gap-1">
+        <div class="row gap-1">
+          <div class="row">
+            <nz-form-label>Loại giá</nz-form-label>
+            <nz-form-control>
+              <div style="width: 150px;">
+                <nz-select (ngModelChange)="onSelectChange($event)" name="type" nzPlaceHolder="Please choose type" [(ngModel)]="priceSelected">
+                  <nz-option *ngFor="let type of priceType" [nzLabel]="type" [nzValue]="type"></nz-option>
+                </nz-select>
+              </div>
+            </nz-form-control>
+          </div>
+
+          <div *ngIf="isVisiblePercent" class="row">
+            <nz-form-label>Phần trăm</nz-form-label>
+            <nz-form-control class="row gap-05">
+              <input type="number" style="width: 70px;" name="percent" nz-input  (input)="onPercentChanged($event)" [value]="percentValue"/>
+              <span> %</span>
+            </nz-form-control>
+          </div>
+        </div>
+
+        <div class="row gap-05" >
+          <nz-form-label>Giá</nz-form-label>
+          <nz-form-control>
+            <input type="text" style="width: 150px;" name="value" nz-input placeholder="Please enter price" [value]="priceValue" (input)="onValueChange($event)"/>
+            <span> đ</span>
+          </nz-form-control>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>

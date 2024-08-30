@@ -12,7 +12,7 @@
                 <nz-form-label>Mã sản phẩm</nz-form-label>
                 <nz-form-control>
                   <input [ngClass]="{'input-infor': true}" [readOnly]="isDisable" name="productId" nz-input
-                    [value]="product.productColorId" />
+                    [value]="product.productId" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -32,7 +32,7 @@
         <div *ngIf="isEdit" nz-col nzSpan="10">
           <div nz-col nzSpan="24">
             <div class="wrap-image">
-              <img src="{{product.imageList[0]}}" alt="productImage" (click)="zoomImage(product.imageList[0])">
+              <img src="{{product.imageList[0].imageUrl}}" alt="productImage" (click)="zoomImage(product.imageList[0].imageUrl)">
             </div>
           </div>
         </div>
@@ -54,7 +54,7 @@
               <input *ngIf="isDisable" [ngClass]="{'input-infor': true}" [readOnly]="isDisable" name="productCate"
                 nz-input placeholder="Please enter category" [value]="product.category" />
 
-              <nz-select *ngIf="!isDisable" name="username3" nzPlaceHolder="Please choose the type"
+              <nz-select *ngIf="!isDisable" name="category" nzPlaceHolder="Please choose the type"
                 [(ngModel)]="cateSelected">
                 <nz-option nzLabel="Cỏ nhân tạo" [nzValue]="1"></nz-option>
                 <nz-option nzLabel="Futsal" [nzValue]="2"></nz-option>
@@ -71,7 +71,7 @@
             <div class="row gap-05" style="width: 70%;">
               <nz-form-control>
                 <input *ngIf="isDisable" [ngClass]="{'input-infor': true}" [readOnly]="isDisable" name="branch" nz-input
-                  placeholder="Please enter branch" [value]="product.branchType?.branch?.branchName" />
+                  placeholder="Please enter branch" [value]="product.productLine?.branch?.branchName" />
 
                 <nz-select *ngIf="!isDisable" name="username3" nzPlaceHolder="Please choose the type"
                   [(ngModel)]="branchIdSelected" (ngModelChange)="onSelectBranchChange($event)">
@@ -95,12 +95,12 @@
             <div class="row gap-05" style="width: 70%;">
               <nz-form-control>
                 <input *ngIf="isDisable" [ngClass]="{'input-infor': true}" [readOnly]="isDisable" name="type" nz-input
-                  placeholder="Please enter branch" [value]="product.branchType?.branchTypeName" />
+                  placeholder="Please enter branch" [value]="product.productLine?.productLineName" />
 
                 <nz-select *ngIf="!isDisable" name="branch" nzPlaceHolder="Please choose branch"
-                  [(ngModel)]="branchTypeIdSelected">
-                  <nz-option *ngFor="let branchType of listBranchTypeOfBranch" [nzLabel]="branchType.branchTypeName"
-                    [nzValue]="branchType.branchTypeId"></nz-option>
+                  [(ngModel)]="productLineIdSelected">
+                  <nz-option *ngFor="let branchType of listProductLine" [nzLabel]="branchType.productLineName"
+                    [nzValue]="branchType.productLineId"></nz-option>
                 </nz-select>
               </nz-form-control>
               <div>
@@ -129,12 +129,42 @@
           </nz-form-item>
         </div>
       </div>
+
+      <div nz-row [nzGutter]="8">
+        @if(product.priceList[1] !== undefined){
+          <div nz-col nzSpan="8" >
+            <nz-form-item style="align-items: center;">
+              <nz-form-label>Giá khuyến mãi</nz-form-label>
+              <span>{{product.priceList[0].value| money}}</span>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="8">
+            <nz-form-item style="align-items: center;">
+              <nz-form-label>Giá Gốc</nz-form-label>
+              <span>{{product.priceList[1].value | money}}</span>
+            </nz-form-item>
+          </div>
+        } @else {
+          <div nz-col nzSpan="8">
+            <nz-form-item style="align-items: center;">
+              <nz-form-label>Giá Gốc</nz-form-label>
+              <span>{{product.priceList[0].value | money}}</span>
+            </nz-form-item>
+          </div>
+        }
+        <div nz-col nzSpan="8">
+          <button (click)="togglePopupAddPrice(product)" class="button-add add-price" *ngIf="!isDisable">
+            <span>Thêm giá mới</span>
+          </button>
+        </div>
+      </div>
+
       <div nz-row [nzGutter]="8">
         <div nz-col nzSpan="24">
           <nz-form-item>
             <nz-form-label>Mô tả</nz-form-label>
             <nz-form-control>
-              <p-editor [readonly]="isDisable" name="description" [(ngModel)]="product.description"
+              <p-editor [readonly]="isDisable" name="description" [ngModel]="product.productLine?.description"
                 [style]="{ height: '320px' }">
               </p-editor>
             </nz-form-control>
@@ -157,12 +187,4 @@
     </ng-template>
   </nz-drawer>
 </div>
-<!--
-<div nz-col nzSpan="12">
-  <nz-form-item>
-    <nz-form-label>DateTime</nz-form-label>
-    <nz-form-control>
-      <nz-range-picker></nz-range-picker>
-    </nz-form-control>
-  </nz-form-item>
-</div> -->
+<app-edit-price [visible]="isEditPopupPrice" [product]="product" (onClosePopup)="onClosePopupEditPrice()"></app-edit-price>

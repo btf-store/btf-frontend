@@ -1,15 +1,16 @@
-import { BranchType } from "./Branch"
+import { ProductLine } from "./Branch"
+import { Image } from "./Image"
 import { Price } from "./Price"
 
 export interface Product {
-  productColorId: number
+  productId: number
   productName: string,
   color: string,
   category: string,
-  onSales?:boolean,
-  branchType?: BranchType,
-  imageList: string[],
+  salePercent?:number,
+  productLine?: ProductLine,
+  imageList: Image[],
   priceList: Price[]  | [],
   sizeList: string[],
-  description: string
+
 }

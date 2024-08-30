@@ -1,0 +1,88 @@
+<nz-drawer [nzBodyStyle]="{ overflow: 'auto' }" [nzMaskClosable]="false" [nzWidth]="720" [nzVisible]="visible"
+  nzTitle="Thông tin hình ảnh" [nzFooter]="footerTpl" (nzOnClose)="close()">
+  <ng-container *nzDrawerContent>
+    <div class="wrapper">
+      <div class="wrap-head" nz-row [nzGutter]="8">
+        <div nz-col nzSpan="6" class="row gap-1">
+          <strong>ProductId: </strong>
+          <span>{{product.productColorId}}</span>
+        </div>
+        <div nz-col nzSpan="18" class="row gap-1">
+          <strong>ProductName: </strong>
+          <span>{{product.productName}}</span>
+        </div>
+      </div>
+      <nz-table #basicTable [nzData]="product.imageList" [nzFrontPagination]="false">
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th class="wrap-th-td">Type</th>
+            <th class="wrap-th-td">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (productImage of basicTable.data; track productImage) {
+          <tr>
+            <td>
+              <div class="wrap-image">
+                <img [src]="productImage.imageUrl" alt="image" (click)="zoomImage(productImage.imageUrl)">
+              </div>
+            </td>
+            <td class="wrap-th-td">
+              <div style="width: 90px;">
+                <nz-select name="type" nzPlaceHolder="Please choose the type" [(ngModel)]="productImage.typeImage">
+                  <nz-option *ngFor="let type of listImageType" [nzLabel]="type" [nzValue]="type"></nz-option>
+                </nz-select>
+              </div>
+            </td>
+            <td class="wrap-th-td">
+              <nz-select name="Status" nzPlaceHolder="Please choose the status" [(ngModel)]="productImage.status">
+                <nz-option nzLabel="ACTIVE" nzValue="ACTIVE"></nz-option>
+                <nz-option nzLabel="INACTIVE" nzValue="INACTIVE"></nz-option>
+              </nz-select>
+            </td>
+          </tr>
+          }
+          <tr *ngFor="let url of listPreviewUrl">
+            <td>
+              <div class="wrap-image">
+                <img [src]="url" alt="image" (click)="zoomImage(url)">
+              </div>
+            </td>
+            <td class="wrap-th-td">
+              <div style="width: 90px;">
+                <nz-select name="type" nzPlaceHolder="Please choose the type" [(ngModel)]="statusSelected">
+                  <nz-option *ngFor="let type of listImageType" [nzLabel]="type" [nzValue]="type"></nz-option>
+                </nz-select>
+              </div>
+            </td>
+            <td class="wrap-th-td">
+              <nz-select name="Status" nzPlaceHolder="Please choose the status" [(ngModel)]="statusSelected">
+                <nz-option *ngFor="let status of listStatus" [nzLabel]="status" [nzValue]="status"></nz-option>
+              </nz-select>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+      <div style="text-align: center;" class="column gap-05">
+        <h3>Tải ảnh</h3>
+        <div class="wrap-upload column gap-1">
+          <input id="file-upload" type="file" (change)="onFileSelected($event)" placeholder="" accept="image/**"
+            multiple>
+          <label for="file-upload" class="custom-file-upload">
+            <span nz-icon nzType="plus" nzTheme="outline"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #footerTpl>
+    <div style="float: right">
+      <button nz-button style="margin-right: 8px;" (click)="close()">Cancel</button>
+      <button nz-button nzType="primary" nz-popconfirm nzPopconfirmTitle="Bạn có chắc chắn muốn hoàn thành"
+        (nzOnConfirm)="close()" nzPopconfirmPlacement="topRight" nz-button>
+        Submit</button>
+    </div>
+  </ng-template>
+</nz-drawer>
