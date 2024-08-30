@@ -59,7 +59,7 @@ export class EditProductComponent {
   listBranch: Branch [] = []
   listProductLine: ProductLine [] = []
   listSizeTemplate: number[] = [37, 37.5, 38, 38.5, 39, 39.5, 40, 40.5, 41, 41.5, 42, 42.5, 43, 43.5, 44, 44.5, 45, 45.5, 46, 47]
-  cateSelected:number = 0
+  cateSelected:number = 1
   branchIdSelected: number = 1;
   productLineIdSelected: number = 1;
   isEditPopupPrice: boolean = false;
@@ -77,7 +77,7 @@ export class EditProductComponent {
 
   ngOnInit(): void {
     this.getAllBranch()
-    this.getBranchesTypeOfBranch(1)
+    this.getBranchesTypeOfBranch(this.branchIdSelected)
   }
 
   ngOnChanges(){
@@ -135,11 +135,22 @@ export class EditProductComponent {
     })
   }
 
+  getProductLineById(productLineId: number){
+    this.productLineService.getProductLineById(productLineId).subscribe({
+      next: (response: Response<ProductLine>) => {
+        this.product.productLine = response.data as ProductLine
+      }
+    })
+  }
+
   onSelectBranchChange(value: number){
     this.getBranchesTypeOfBranch(value)
     this.productLineIdSelected = 0;
   }
 
+  onSelectProductLineChange(value: number){
+    this.getProductLineById(value);
+  }
 
   zoomImage(url: string): void {
     {

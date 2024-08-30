@@ -16,7 +16,13 @@ export class ProductLineService {
   ) { }
 
   getAllProductLineByBranchId(branchId: number): Observable<Response<ProductLine>> {
-    return this.apiService.get(this.url.concat(`/${branchId}`), {
+    return this.apiService.get(this.url.concat(`/getByBranchId/${branchId}`), {
+      responseType: 'json'
+    })
+  }
+
+  getProductLineById(productLineId: number): Observable<Response<ProductLine>> {
+    return this.apiService.get(this.url.concat(`/getById/${productLineId}`), {
       responseType: 'json'
     })
   }
