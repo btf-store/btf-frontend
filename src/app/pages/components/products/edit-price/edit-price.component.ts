@@ -35,18 +35,21 @@ import { concatMap } from 'rxjs';
 })
 export class EditPriceComponent {
   priceType = Constants.PRICE_TYPE
-  priceSelected = 'ORIGIN'
+  priceSelected = Constants.PRICE_TYPE[0]
   isVisiblePercent: boolean = false;
-  priceValue: string = '';
   percentValue: number = 0;
+  priceValue: string = '';
+
   @Input() visible: boolean = false;
   @Input() product!: Product;
   @Output() onClosePopup = new EventEmitter<boolean>
 
-  constructor(private nzMessageService: NzMessageService) { }
+  constructor(
+    private nzMessageService: NzMessageService
+  ) { }
 
   onSelectChange(value: string) {
-    if (value === 'ON_SALE') {
+    if (value === Constants.PRICE_TYPE[1]) {
       this.isVisiblePercent = true;
     } else {
       this.isVisiblePercent = false

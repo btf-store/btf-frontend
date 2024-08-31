@@ -3,16 +3,16 @@
   <nz-drawer [nzBodyStyle]="{ overflow: 'auto' }" [nzMaskClosable]="false" [nzWidth]="800" [nzVisible]="visible"
     [nzTitle]="title" [nzFooter]="footerTpl" (nzOnClose)="close()">
 
-    <form nz-form *nzDrawerContent>
+    <form nz-form [formGroup]="formProduct" *nzDrawerContent>
       <div nz-row [nzGutter]="8">
-        <div nz-col nzSpan="14">
+        <div nz-col nzSpan="18">
           <div *ngIf="isEdit" nz-row [nzGutter]="8">
             <div nz-col nzSpan="24">
               <nz-form-item>
                 <nz-form-label>Mã sản phẩm</nz-form-label>
                 <nz-form-control>
                   <input [ngClass]="{'input-infor': true}" [readOnly]="isDisable" name="productId" nz-input
-                    [value]="product.productId" />
+                    formControlName="productId" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -23,16 +23,22 @@
                 <nz-form-label>Tên sản phẩm</nz-form-label>
                 <nz-form-control>
                   <input [ngClass]="{'input-infor': true, 'input-open': !isDisable}" [readOnly]="isDisable"
-                    name="productName" nz-input placeholder="Please enter product name" [value]="product.productName" />
+                    name="productName" nz-input placeholder="Vui lòng nhập tên sản phẩm"
+                    formControlName="productName" />
                 </nz-form-control>
               </nz-form-item>
             </div>
           </div>
         </div>
-        <div *ngIf="isEdit" nz-col nzSpan="10">
+        <div *ngIf="isEdit" nz-col nzSpan="6">
           <div nz-col nzSpan="24">
             <div class="wrap-image">
-              <img src="{{product.imageList[0].imageUrl}}" alt="productImage" (click)="zoomImage(product.imageList[0].imageUrl)">
+              @if(product.imageList !== null){
+              <img src="{{product.imageList[0].imageUrl}}" alt="productImage"
+                (click)="zoomImage(product.imageList[0].imageUrl)">
+              }@else {
+              <img src="assets/images/logo.jpg" alt="product-image">
+              }
             </div>
           </div>
         </div>
@@ -43,7 +49,8 @@
             <nz-form-label>Màu sắc</nz-form-label>
             <nz-form-control>
               <input [ngClass]="{'input-infor': true, 'input-open': !isDisable}" [readOnly]="isDisable"
-                name="productColor" nz-input placeholder="Please enter product color" [value]="product.color" />
+                name="productColor" nz-input placeholder="Vui lòng nhập màu sắc" [value]="product.color"
+                formControlName="productColor" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -52,10 +59,10 @@
             <nz-form-label>Loại giày</nz-form-label>
             <nz-form-control>
               <input *ngIf="isDisable" [ngClass]="{'input-infor': true}" [readOnly]="isDisable" name="productCate"
-                nz-input placeholder="Please enter category" [value]="product.category" />
+                nz-input [value]="product.category.categoryName" />
 
-              <nz-select *ngIf="!isDisable" name="category" nzPlaceHolder="Please choose the type"
-                [(ngModel)]="cateSelected">
+              <nz-select *ngIf="!isDisable" name="category" nzPlaceHolder="Vui lòng chọn loại giày"
+                formControlName="categoryId">
                 <nz-option nzLabel="Cỏ nhân tạo" [nzValue]="1"></nz-option>
                 <nz-option nzLabel="Futsal" [nzValue]="2"></nz-option>
               </nz-select>
@@ -71,21 +78,20 @@
             <div class="row gap-05" style="width: 70%;">
               <nz-form-control>
                 <input *ngIf="isDisable" [ngClass]="{'input-infor': true}" [readOnly]="isDisable" name="branch" nz-input
-                  placeholder="Please enter branch" [value]="product.productLine?.branch?.branchName" />
+                  [value]="product.productLine?.branch?.branchName" />
 
-                <nz-select *ngIf="!isDisable" name="username3" nzPlaceHolder="Please choose the type"
-                  [(ngModel)]="branchIdSelected" (ngModelChange)="onSelectBranchChange($event)">
-
+                <nz-select *ngIf="!isDisable" name="username3" nzPlaceHolder="Vui lòng chọn thương hiệu"
+                  formControlName="branchId" (ngModelChange)="onSelectBranchChange($event)">
                   <nz-option *ngFor="let branch of listBranch" [nzLabel]="branch.branchName"
                     [nzValue]="branch.branchId">
                   </nz-option>
                 </nz-select>
               </nz-form-control>
-              <div>
+              <!-- <div>
                 <button class="button-add" *ngIf="!isDisable">
                   <span nz-icon nzType="plus" nzTheme="outline"></span>
                 </button>
-              </div>
+              </div> -->
             </div>
           </nz-form-item>
         </div>
@@ -95,20 +101,19 @@
             <div class="row gap-05" style="width: 70%;">
               <nz-form-control>
                 <input *ngIf="isDisable" [ngClass]="{'input-infor': true}" [readOnly]="isDisable" name="type" nz-input
-                  placeholder="Please enter branch" [value]="product.productLine?.productLineName" />
+                  [value]="product.productLine?.productLineName" />
 
-                <nz-select *ngIf="!isDisable" name="productLine" nzPlaceHolder="Please choose branch"
-                  [(ngModel)]="productLineIdSelected"
-                  (ngModelChange)="onSelectProductLineChange($event)">
-                  <nz-option *ngFor="let branchType of listProductLine" [nzLabel]="branchType.productLineName"
-                    [nzValue]="branchType.productLineId"></nz-option>
+                <nz-select *ngIf="!isDisable" name="productLine" nzPlaceHolder="Vui lòng chọn dòng sản phẩm"
+                  formControlName="productLineId" (ngModelChange)="onSelectProductLineChange($event)">
+                  <nz-option *ngFor="let productLine of listProductLine" [nzLabel]="productLine.productLineName"
+                    [nzValue]="productLine.productLineId"></nz-option>
                 </nz-select>
               </nz-form-control>
-              <div>
+              <!-- <div>
                 <button class="button-add" *ngIf="!isDisable">
                   <span nz-icon nzType="plus" nzTheme="outline"></span>
                 </button>
-              </div>
+              </div> -->
             </div>
           </nz-form-item>
         </div>
@@ -118,9 +123,9 @@
           <nz-form-item>
             <nz-form-label>Kích thước</nz-form-label>
             <nz-form-control>
-              <nz-select [ngClass]="{'input-infor': true, 'input-open': !isDisable}" [disabled]="isDisable"
-                name="productSize" [nzMaxTagCount]="9" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
-                nzPlaceHolder="Please select" [(ngModel)]="product.sizeList">
+              <nz-select [ngClass]="{'input-infor': true, 'input-open': !isDisable}" name="productSize"
+                [nzMaxTagCount]="9" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
+                nzPlaceHolder="Vui lòng chọn kích thước" [nzDisabled]="isDisable" formControlName="listSize">
                 @for (item of listSizeTemplate; track item) {
                 <nz-option [nzLabel]="item" [nzValue]="item"></nz-option>
                 }
@@ -131,27 +136,36 @@
         </div>
       </div>
 
-      <div nz-row [nzGutter]="8">
-        @if(product.priceList[1] !== undefined){
-          <div nz-col nzSpan="8" >
-            <nz-form-item style="align-items: center;">
-              <nz-form-label>Giá khuyến mãi</nz-form-label>
-              <span>{{product.priceList[0].value| money}}</span>
-            </nz-form-item>
-          </div>
-          <div nz-col nzSpan="8">
-            <nz-form-item style="align-items: center;">
-              <nz-form-label>Giá Gốc</nz-form-label>
-              <span>{{product.priceList[1].value | money}}</span>
-            </nz-form-item>
-          </div>
+      <div *ngIf="isEdit" nz-row [nzGutter]="8">
+        @if (product.priceList === null) {
+        <div nz-col nzSpan="8">
+          <nz-form-item style="align-items: center;">
+            <nz-form-label>Giá</nz-form-label>
+            <span>N/A</span>
+          </nz-form-item>
+        </div>
         } @else {
-          <div nz-col nzSpan="8">
-            <nz-form-item style="align-items: center;">
-              <nz-form-label>Giá Gốc</nz-form-label>
-              <span>{{product.priceList[0].value | money}}</span>
-            </nz-form-item>
-          </div>
+        @if(product.priceList[1] !== undefined){
+        <div nz-col nzSpan="8">
+          <nz-form-item style="align-items: center;">
+            <nz-form-label>Giá khuyến mãi</nz-form-label>
+            <span>{{product.priceList[0].value| money}}</span>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="8">
+          <nz-form-item style="align-items: center;">
+            <nz-form-label>Giá Gốc</nz-form-label>
+            <span>{{product.priceList[1].value | money}}</span>
+          </nz-form-item>
+        </div>
+        } @else {
+        <div nz-col nzSpan="8">
+          <nz-form-item style="align-items: center;">
+            <nz-form-label>Giá Gốc</nz-form-label>
+            <span>{{product.priceList[0].value | money}}</span>
+          </nz-form-item>
+        </div>
+        }
         }
         <div nz-col nzSpan="8">
           <button (click)="togglePopupAddPrice(product)" class="button-add add-price" *ngIf="!isDisable">
@@ -162,11 +176,23 @@
 
       <div nz-row [nzGutter]="8">
         <div nz-col nzSpan="24">
+          <nz-form-label>Mô tả Dòng sản phẩm</nz-form-label>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="8">
+        <div nz-col nzSpan="24" style="cursor: default;">
           <nz-form-item>
-            <nz-form-label>Mô tả Dòng sản phẩm</nz-form-label>
             <nz-form-control>
-              <p-editor [readonly]="isDisable" name="description" [ngModel]="product.productLine?.description"
+              <!-- <p-editor [readonly]="isDisable" name="description" [ngModel]="product.productLine?.description"
                 [style]="{ height: '320px' }">
+              </p-editor> -->
+              <p-editor [readonly]="true" name="description" formControlName="description"
+                [style]="{ height: '320px' }">
+                <ng-template pTemplate="header">
+                  <span class="ql-formats">
+                    {{product.productLine?.productLineName}}
+                  </span>
+                </ng-template>
               </p-editor>
             </nz-form-control>
           </nz-form-item>
@@ -176,16 +202,17 @@
 
     <ng-template #footerTpl>
       <div style="float: right">
-        <button nz-button style="margin-right: 8px;" (click)="close()">Cancel</button>
-        <button *ngIf="!isDisable" nz-button nzType="primary"
+        <button nz-button style="margin-right: 8px;" (click)="close()">Hủy bỏ</button>
+        <button [ngClass]="{'disabled': !formProduct.valid}" *ngIf="!isDisable" nz-button nzType="primary"
           nz-popconfirm
-          nzPopconfirmTitle="Bạn có chắc chắn muốn hoàn thành" (nzOnConfirm)="confirm()"
+          nzPopconfirmTitle="Bạn có chắc chắn muốn hoàn thành ?" (nzOnConfirm)="confirm()"
           nzPopconfirmPlacement="topRight" nz-button>
-          Submit
+          Xác nhận
         </button>
-        <button *ngIf="isDisable" nz-button nzType="primary" (click)="toggleEdit()">Edit</button>
+        <button *ngIf="isDisable" nz-button nzType="primary" (click)="toggleEdit()">Chỉnh sửa</button>
       </div>
     </ng-template>
   </nz-drawer>
 </div>
-<app-edit-price [visible]="isEditPopupPrice" [product]="product" (onClosePopup)="onClosePopupEditPrice()"></app-edit-price>
+<app-edit-price [visible]="isEditPopupPrice" [product]="product"
+  (onClosePopup)="onClosePopupEditPrice()"></app-edit-price>

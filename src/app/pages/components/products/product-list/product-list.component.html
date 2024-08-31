@@ -14,9 +14,9 @@
         <option value="4">Giảm giá</option>
       </select>
     </div>
-      <button class="button-add" (click)="togglePopupCreate()">
-        <span nz-icon nzType="plus" nzTheme="outline"></span>
-      </button>
+    <button class="button-add" (click)="togglePopupCreate()">
+      <span nz-icon nzType="plus" nzTheme="outline"></span>
+    </button>
   </div>
   <div class="wrap-table">
     <nz-table #basicTable [nzData]="products" (nzPageIndexChange)="scrollTopPage()">
@@ -31,7 +31,7 @@
           <th>Hình ảnh</th>
           <th>Chi tiết</th>
           <th>Thêm hình</th>
-          <th>Xóa</th>
+          <th>Trạng thái</th>
         </tr>
       </thead>
       <tbody>
@@ -47,27 +47,46 @@
             {{data.productLine?.branch?.branchName}}
           </td>
           <td>
-            {{data.category }}
+            {{data.category.categoryName }}
           </td>
           <td>
+            @if(data.priceList !== null){
             {{data.priceList[0].value | money}}
+            }@else {
+            N/A
+            }
           </td>
           <td>
             {{data.salePercent ? 'Đang giảm giá': 'N/A'}}
           </td>
           <td>
             <div class="wrap-image">
+              @if(data.imageList !== null){
               <img src="{{data.imageList[0].imageUrl}}" alt="product-image">
+              }@else {
+              <img src="assets/images/logo.jpg" alt="product-image">
+              }
             </div>
           </td>
+
           <td class="wrap-icon">
-            <span class="icon-action icon-view" nz-icon nzType="eye" nzTheme="outline" (click)="viewProductDetail(data)"></span>
+            <span class="icon-action icon-view" nz-icon nzType="eye" nzTheme="outline"
+              (click)="viewProductDetail(data)"></span>
           </td>
           <td class="wrap-icon">
-            <span class="icon-action icon-image" nz-icon nzType="file-image" nzTheme="outline" (click)="editImage(data)"></span>
+            <span class="icon-action icon-image" nz-icon nzType="file-image" nzTheme="outline"
+              (click)="editImage(data)"></span>
           </td>
           <td class="wrap-icon">
-            <span class="icon-action icon-delete" nz-icon nzType="delete" nzTheme="outline"></span>
+            @if (data.status === 'ACTIVE') {
+            <span class="icon-action icon-active" nz-icon nzType="check" nzTheme="outline" nz-popconfirm
+              nzPopconfirmTitle="Bạn có chắc chắn muốn thay đổi trạng thái ?"
+              (nzOnConfirm)="inActiveProduct(data)" nzPopconfirmPlacement="topRight" nz-button></span>
+            }@else {
+            <span class="icon-action icon-inactive" nz-icon nzType="close" nzTheme="outline" nz-popconfirm
+              nzPopconfirmTitle="Bạn có chắc chắn muốn thay đổi trạng thái ?"
+              (nzOnConfirm)="activeProduct(data)" nzPopconfirmPlacement="topRight" nz-button></span>
+            }
           </td>
         </tr>
         }
@@ -75,5 +94,7 @@
     </nz-table>
   </div>
 </div>
-<app-edit-product [isEdit]="isEdit" [visible]="visibleEditProduct" (onClosePopup)="togglePopupEdit()" [product]="productDetail"></app-edit-product>
-<app-edit-image [visible]="visibleEditImage" [product]="productDetail" (onClosePopup)="togglePopupEditImage()"></app-edit-image>
+<app-edit-product (onSubmited)="onSubmited($event)" [isEdit]="isEdit" [visible]="visibleEditProduct"
+  (onClosePopup)="togglePopupEdit()" [product]="productDetail"></app-edit-product>
+<app-edit-image [visible]="visibleEditImage" [product]="productDetail"
+  (onClosePopup)="togglePopupEditImage()"></app-edit-image>

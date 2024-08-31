@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { NzDatePickerComponent, NzRangePickerComponent } from 'ng-zorro-antd/date-picker';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
@@ -10,7 +10,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputGroupComponent, NzInputModule } from 'ng-zorro-antd/input';
 import { NzOptionComponent, NzSelectComponent } from 'ng-zorro-antd/select';
 import { NzUploadComponent, NzUploadFile } from 'ng-zorro-antd/upload';
-import { Product } from '../../../../core/models/interface/Product';
+import { Product, ProductRequest } from '../../../../core/models/interface/Product';
 import { EditorModule } from 'primeng/editor';
 import { NzImageService } from 'ng-zorro-antd/image';
 import { Branch, ProductLine } from '../../../../core/models/interface/Branch';
@@ -20,6 +20,12 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { MoneyPipe } from '../../../../shared/pipes/money.pipe';
 import { EditPriceComponent } from "../edit-price/edit-price.component";
 import { ProductLineService } from '../../../../core/services/productLine/product-line.service';
+import { Constants } from '../../../../core/constants/Constants';
+import { ProductService } from '../../../../core/services/product/product.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { catchError, finalize, Observable } from 'rxjs';
+import { error } from '@ant-design/icons-angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-product',
@@ -44,8 +50,9 @@ import { ProductLineService } from '../../../../core/services/productLine/produc
     EditorModule,
     NzPopconfirmModule,
     MoneyPipe,
-    EditPriceComponent
-],
+    EditPriceComponent,
+    ReactiveFormsModule
+  ],
   providers: [
     NzImageService,
   ],
@@ -54,39 +61,64 @@ import { ProductLineService } from '../../../../core/services/productLine/produc
 })
 export class EditProductComponent {
 
-  isDisable: boolean = true;
+  formProduct: FormGroup;
   title: string = "Thông tin sản phẩm"
-  listBranch: Branch [] = []
-  listProductLine: ProductLine [] = []
-  listSizeTemplate: number[] = [37, 37.5, 38, 38.5, 39, 39.5, 40, 40.5, 41, 41.5, 42, 42.5, 43, 43.5, 44, 44.5, 45, 45.5, 46, 47]
-  cateSelected:number = 1
-  branchIdSelected: number = 1;
-  productLineIdSelected: number = 1;
+  isDisable: boolean = true;
   isEditPopupPrice: boolean = false;
+  listBranch: Branch[] = []
+  listProductLine: ProductLine[] = []
+  listSizeTemplate: number[] = Constants.SIZE_TEMPLATE
 
   @Input() visible = false;
+  @Input() isEdit: boolean = false;
   @Input() product!: Product;
   @Output() onClosePopup = new EventEmitter<boolean>
-  @Input() isEdit: boolean = false;
+  @Output() onSubmited = new EventEmitter<Product>
 
   constructor(
     private nzImageService: NzImageService,
     private branchService: BranchService,
-    private productLineService: ProductLineService
-  ){}
+    private productLineService: ProductLineService,
+    private formBuilder: FormBuilder,
+    private productService: ProductService,
+    private nzMessageService: NzMessageService,
+    private router: Router
+  ) {
+    this.formProduct = this.formBuilder.group({
+      productId: [0],
+      productName: ['', [Validators.required]],
+      productColor: ['', [Validators.required]],
+      branchId: [1, [Validators.required, Validators.min(1)]],
+      categoryId: [1, [Validators.required, Validators.min(1)]],
+      productLineId: [1, [Validators.required, Validators.min(1)]],
+      listSize: [[], [Validators.required]],
+      description: ''
+    });
+  }
 
   ngOnInit(): void {
     this.getAllBranch()
-    this.getBranchesTypeOfBranch(this.branchIdSelected)
   }
 
-  ngOnChanges(){
+  ngOnChanges() {
     this.isDisable = this.isEdit
-    if(!this.isEdit){
+    if (!this.isEdit) {
       this.title = 'Tạo mới sản phẩm'
     } else {
       this.title = 'Thông tin sản phẩm'
     }
+
+    console.log("on changes")
+    this.formProduct.patchValue({
+      productId: this.product.productId,
+      productName: this.product.productName,
+      productColor: this.product.color,
+      branchId: this.product.productLine?.branch.branchId,
+      categoryId: this.product.category.categoryId,
+      productLineId: this.product.productLine?.productLineId,
+      listSize: this.product.listSize,
+      description: this.product.productLine?.description
+    })
   }
 
   open(): void {
@@ -100,23 +132,22 @@ export class EditProductComponent {
   }
 
   confirm() {
-    this.close()
+    let productRequest: ProductRequest = this.formProduct.value
+    if (this.isEdit) {
+      this.updateProduct(productRequest)
+    } else {
+      this.createProduct(productRequest)
+    }
   }
 
   toggleEdit() {
     this.isDisable = false;
     this.title = "Cập nhật sản phẩm"
-    if(this.product.productLine){
-      if(this.product.category === 'Cỏ nhân tạo'){
-        this.cateSelected = 1
-      }else if (this.product.category === 'Futsal'){
-        this.cateSelected = 2
-      }
-      this.getBranchesTypeOfBranch(this.product.productLine?.branch.branchId)
-      this.branchIdSelected = this.product.productLine?.branch.branchId
-      this.productLineIdSelected = this.product.productLine.productLineId
+    if (this.product.productLine) {
+      this.getProductLineOfBranch(this.product.productLine?.branch.branchId)
     }
   }
+
 
 
   getAllBranch() {
@@ -127,7 +158,7 @@ export class EditProductComponent {
     })
   }
 
-  getBranchesTypeOfBranch(branchId: number) {
+  getProductLineOfBranch(branchId: number) {
     this.productLineService.getAllProductLineByBranchId(branchId).subscribe({
       next: (response: Response<ProductLine>) => {
         this.listProductLine = response.data as ProductLine[]
@@ -135,21 +166,33 @@ export class EditProductComponent {
     })
   }
 
-  getProductLineById(productLineId: number){
+  getProductLineById(productLineId: number) {
     this.productLineService.getProductLineById(productLineId).subscribe({
       next: (response: Response<ProductLine>) => {
-        this.product.productLine = response.data as ProductLine
+        const productLine = response.data as ProductLine
+        this.formProduct.patchValue({
+          description: productLine.description
+        })
       }
     })
   }
 
-  onSelectBranchChange(value: number){
-    this.getBranchesTypeOfBranch(value)
-    this.productLineIdSelected = 0;
+  onSelectBranchChange(value: number) {
+    if(value != undefined){
+      this.getProductLineOfBranch(value)
+      this.formProduct.patchValue({
+        productLineId: 0,
+      })
+    }
   }
 
-  onSelectProductLineChange(value: number){
-    this.getProductLineById(value);
+  onSelectProductLineChange(value: number) {
+    if (value !== undefined) {
+      if(value != 0){
+
+        this.getProductLineById(value);
+      }
+    }
   }
 
   zoomImage(url: string): void {
@@ -169,7 +212,47 @@ export class EditProductComponent {
     this.isEditPopupPrice = !this.isEditPopupPrice
   }
 
-  onClosePopupEditPrice(){
+  onClosePopupEditPrice() {
     this.isEditPopupPrice = false;
+  }
+
+  createProduct(productCreate: ProductRequest) {
+    const id = this.nzMessageService.loading(Constants.CREATING_MSG, { nzDuration: 0 }).messageId
+    this.productService.createProduct(productCreate).pipe(
+      finalize(() => {
+        this.nzMessageService.remove(id)
+      }),
+      catchError(error => {
+        console.log(error)
+        this.nzMessageService.error(Constants.FAILED_MSG);
+        return new Observable<Response<Product>>;
+      })
+    ).subscribe(
+      (response: Response<Product>) => {
+        this.product = response.data as Product
+        this.nzMessageService.success(Constants.CREATED_MSG);
+        this.onSubmited.emit(this.product)
+        // this.close()
+      }
+    )
+  }
+
+  updateProduct(productUpdate: ProductRequest) {
+    const id = this.nzMessageService.loading(Constants.UPDATING_MSG).messageId
+    this.productService.updateProduct(productUpdate).pipe(
+      finalize(() => {
+        this.nzMessageService.remove(id)
+      }),
+      catchError(error => {
+        this.nzMessageService.error(Constants.FAILED_MSG)
+        return new Observable<Response<Product>>
+      })
+    ).subscribe({
+      next: (response: Response<Product>) => {
+        this.product = response.data as Product
+        this.nzMessageService.success(Constants.UPDATED_MSG)
+        this.onSubmited.emit(this.product)
+      }
+    })
   }
 }

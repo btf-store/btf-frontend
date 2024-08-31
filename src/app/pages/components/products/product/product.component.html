@@ -11,11 +11,11 @@
       </div> -->
     </div>
     <div [@imageState]="imageLoaded ? 'loaded' : 'loading'">
-      <img  class="image" [src]="product.imageList[0].imageUrl" alt="productImage" loading="lazy" (load)="onImageLoad()">
+      <img class="image" [src]="product.imageList[0].imageUrl" alt="productImage" loading="lazy" (load)="onImageLoad()">
     </div>
   </div>
   <!-- style="margin-bottom: 0; height: 60px;" -->
-  <h4 class="productName" >{{product.productName}}</h4>
+  <h4 class="productName">{{product.productName}}</h4>
 
   <div class="row gap-05 wrap-price">
     <span class="new-price">{{product.priceList[0].value | money}}</span>
@@ -26,5 +26,6 @@
       </span>
     </div>
     }
+
   </div>
 </div>

@@ -5,3 +5,10 @@ export interface Price {
   dateFrom?: string,
   status?: string
 }
+
+export interface PriceRequest {
+  productId: number
+  priceType: string,
+  value: number,
+  salePercent: number
+}

@@ -1,0 +1,57 @@
+<div class="wrapper">
+  <div class="fillter row gap-2">
+    <div class="option-filter row gap-2">
+      <span style="text-align: center;" nz-icon nzType="search" nzTheme="outline"></span>
+      <div class="input-search">
+        <input nz-input placeholder="Nhập thông tin" nzSize="large" />
+      </div>
+    </div>
+    <div>
+      <select class="select-sort" name="" id="">
+        <option value="1" disabled>Sắp xếp</option>
+        <option value="2">Giá tăng dần</option>
+        <option value="3">Giá giảm dần</option>
+        <option value="4">Giảm giá</option>
+      </select>
+    </div>
+      <button class="button-add">
+        <span nz-icon nzType="plus" nzTheme="outline"></span>
+      </button>
+  </div>
+  <div class="wrap-table">
+    <nz-table #basicTable [nzData]="productLines" (nzPageIndexChange)="scrollTopPage()">
+      <thead>
+        <tr>
+          <th>Mã Dòng SP</th>
+          <th>Tên dòng SP</th>
+          <th>Thương hiệu</th>
+          <th style="text-align: center;">Chỉnh sửa</th>
+          <th style="text-align: center;">Xóa</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (data of basicTable.data; track data) {
+        <tr>
+          <td>
+            {{data.productLineId}}
+          </td>
+          <td>
+            {{data.productLineName}}
+          </td>
+          <td>
+            {{data.branch.branchName}}
+          </td>
+          <td class="wrap-icon">
+            <span class="icon-action icon-view" nz-icon nzType="edit" nzTheme="outline"></span>
+          </td>
+          <td class="wrap-icon">
+            <span class="icon-action icon-delete" nz-icon nzType="delete" nzTheme="outline"></span>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </nz-table>
+  </div>
+</div>
+<!-- <app-edit-product [isEdit]="isEdit" [visible]="visibleEditProduct" (onClosePopup)="togglePopupEdit()" [product]="productDetail"></app-edit-product>
+<app-edit-image [visible]="visibleEditImage" [product]="productDetail" (onClosePopup)="togglePopupEditImage()"></app-edit-image> -->

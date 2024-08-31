@@ -1,10 +1,4 @@
-<nz-modal [(nzVisible)]="visible" nzTitle="Thêm giá mới" (nzOnCancel)="onClose()" (nzOnOk)="onSubmit()"
-      nz-popconfirm
-      nzPopconfirmTitle="Are you sure?"
-      nzOkText="ok"
-      nzCancelText="cancel"
-      (nzOnConfirm)="onSubmit()"
->
+<nz-modal [(nzVisible)]="visible" nzTitle="Thêm giá mới" (nzOnCancel)="onClose()" (nzOnOk)="onSubmit()">
   <ng-container *nzModalContent>
     <form>
       <div class="column gap-1">

@@ -8,9 +8,14 @@
         <li nz-menu-item>Option 4</li>
       </ul>
     </li>
-    <li [routerLink]=" "  nz-menu-item>
-      Quản lí sản phẩm
+    <li nz-submenu nzTitle="Quản Lí Sản Phẩm"  nzOpen>
+      <ul>
+        <li routerLink="product-management" nz-menu-item>Sản Phẩm</li>
+        <li routerLink="product-line-management" nz-menu-item>Dòng Sản Phẩm</li>
+        <li routerLink="branch-management" nz-menu-item>Thương Hiệu</li>
+      </ul>
     </li>
+
     <!-- <li nz-menu-item nzTitle="Quản lí sản phẩm" nzIcon="appstore"> -->
       <!-- <ul>
         <li nz-menu-item>Option 5</li>

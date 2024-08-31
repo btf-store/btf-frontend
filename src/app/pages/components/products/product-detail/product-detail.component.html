@@ -23,7 +23,7 @@
     <div class="wrap-infor column gap-05">
       <h2>{{product.productName}} / {{product.color}}</h2>
       <div class="row gap-2">
-        <span>Loại: {{product.category}}</span>
+        <span>Loại: {{product.category.categoryName}}</span>
         <span>Mã SP: {{product.productId}}</span>
       </div>
 
@@ -40,7 +40,7 @@
 
       <span>Kích thước</span>
       <nz-radio-group class="wrap-size" [(ngModel)]="sizeValue" nzButtonStyle="solid">
-        <label *ngFor="let size of product.sizeList" class="radio-size" nz-radio-button
+        <label *ngFor="let size of product.listSize" class="radio-size" nz-radio-button
           nzValue="{{size}}">{{size}}</label>
       </nz-radio-group>
 

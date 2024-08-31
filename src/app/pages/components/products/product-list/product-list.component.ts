@@ -13,6 +13,10 @@ import { Response } from '../../../../core/models/generic/Response';
 import { MoneyPipe } from '../../../../shared/pipes/money.pipe';
 import { Router } from '@angular/router';
 import { EditImageComponent } from "../../image/edit-image/edit-image.component";
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { catchError, finalize, Observable } from 'rxjs';
+import { Constants } from '../../../../core/constants/Constants';
 
 @Component({
   selector: 'app-product-list',
@@ -26,7 +30,8 @@ import { EditImageComponent } from "../../image/edit-image/edit-image.component"
     NzIconModule,
     EditProductComponent,
     MoneyPipe,
-    EditImageComponent
+    EditImageComponent,
+    NzPopconfirmModule,
 ],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css'
@@ -44,17 +49,22 @@ export class ProductListComponent{
     productId: 0,
     productName: '',
     color: '',
-    category: '',
+    category: {
+      categoryId: 0,
+      categoryName: ''
+    },
     imageList: [],
     priceList: [{
       value: 0
     }],
-    sizeList: [],
+    listSize: [],
+    status: ''
   }
 
   constructor(
     private productService: ProductService,
     private router:  Router,
+    private nzMessageService: NzMessageService
   ){}
 
   ngOnInit() {
@@ -63,7 +73,7 @@ export class ProductListComponent{
 
   viewProductDetail(product: Product){
     this.isEdit = true;
-    this.visibleEditProduct = !this.visibleEditProduct
+    this.visibleEditProduct = true;
     this.productDetail = product
   }
 
@@ -82,12 +92,16 @@ export class ProductListComponent{
       productId: 0,
       productName: '',
       color: '',
-      category: '',
+      category: {
+        categoryId: 0,
+        categoryName: ''
+      },
       imageList: [],
       priceList: [{
         value: 0
       }],
-      sizeList: [],
+      listSize: [],
+      status: ''
     }
   }
 
@@ -111,4 +125,50 @@ export class ProductListComponent{
     this.productDetail = product
   }
 
+  onSubmited(productCreated: Product) {
+    this.viewProductDetail(productCreated)
+    this.getAllProduct()
+  }
+
+  inActiveProduct(product: Product){
+    let param: RequestParams = {
+      productId: product.productId
+    }
+    const id = this.nzMessageService.loading(Constants.UPDATED_MSG).messageId
+    this.productService.inActiveProduct(param).pipe(
+      finalize(() => {
+        this.nzMessageService.remove(id)
+      }),
+      catchError(error => {
+        console.log(error)
+        return new Observable();
+      })
+    ).subscribe({
+      next:  () => {
+        this.getAllProduct()
+        this.nzMessageService.success(Constants.UPDATED_MSG)
+      }
+    })
+  }
+
+  activeProduct(product: Product){
+    let param: RequestParams = {
+      productId: product.productId
+    }
+    const id = this.nzMessageService.loading(Constants.UPDATED_MSG).messageId
+    this.productService.activeProduct(param).pipe(
+      finalize(() => {
+        this.nzMessageService.remove(id)
+      }),
+      catchError(error => {
+        console.log(error)
+        return new Observable();
+      })
+    ).subscribe({
+      next:  () => {
+        this.getAllProduct()
+        this.nzMessageService.success(Constants.UPDATED_MSG)
+      }
+    })
+  }
 }

@@ -7,12 +7,12 @@
 
 .fillter {
   height: 40px;
-  width: 70%;
+  width: 50%;
   margin: 30px auto ;
 }
 
 .wrap-table {
-  width: 95%;
+  width: 70%;
   margin: 50px auto ;
 }
 
@@ -46,7 +46,7 @@
 }
 
 .icon-view  {
-  color: #4096ff;
+  color: #ffbb00;
 }
 
 .icon-price {
@@ -85,12 +85,4 @@
 .button-add:hover {
   background-color: #4096ff;
   color: white;
-}
-
-.icon-active {
-  color: green;
-}
-
-.icon-inactive {
-  color: red;
 }

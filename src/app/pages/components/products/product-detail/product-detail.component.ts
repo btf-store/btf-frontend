@@ -55,12 +55,16 @@ export class ProductDetailComponent {
     productId: 0,
     productName: '',
     color: '',
-    category: '',
+    category: {
+      categoryId: 0,
+      categoryName: ''
+    },
     imageList: [],
     priceList: [{
       value: 0
     }],
-    sizeList: [],
+    listSize: [],
+    status: ''
   }
   productsRelate: Product[] = []
   countImageLoad = 0;
@@ -112,7 +116,6 @@ export class ProductDetailComponent {
   }
 
   getProductRelate(branchId: number, productColorId: number){
-    console.log("productRelate")
     const param: RequestParams = {
       branchId: branchId,
       productColorId: productColorId

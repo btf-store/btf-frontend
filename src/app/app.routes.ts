@@ -5,6 +5,8 @@ import { ProductDetailComponent } from './pages/components/products/product-deta
 import { CartComponent } from './pages/components/cart/cart.component';
 import { AdminComponent } from './pages/layouts/admin/admin.component';
 import { ProductListComponent } from './pages/components/products/product-list/product-list.component';
+import { ProductLineListComponent } from './pages/components/productLines/product-line-list/product-line-list.component';
+import { BranchListComponent } from './pages/components/branch/branch-list/branch-list.component';
 
 export const routes: Routes = [
   // { path: '', pathMatch: 'full', redirectTo: '/welcome' },
@@ -31,9 +33,21 @@ export const routes: Routes = [
     path: 'admin-dashboard',
     component: AdminComponent,
     children: [
+      // {
+      //   path: '',
+      //   component: ProductListComponent
+      // },
       {
-        path: '',
+        path: 'product-management',
         component: ProductListComponent
+      },
+      {
+        path: 'product-line-management',
+        component: ProductLineListComponent
+      },
+      {
+        path: 'branch-management',
+        component: BranchListComponent
       }
     ]
   }

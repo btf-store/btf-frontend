@@ -14,11 +14,11 @@ export class ApiService {
     return this.httpClient.get(url, options) as Observable<T>
   }
 
-  post<T>(url: string, body: T, options: Options){
+  post<T>(url: string, body: any, options: Options){
     return this.httpClient.post(url,body,  options) as Observable<T>
   }
 
-  put<T>(url: string, body: T, options: Options){
+  put<T>(url: string, body: any, options: Options){
     return this.httpClient.put(url, body, options) as Observable<T>
   }
 
