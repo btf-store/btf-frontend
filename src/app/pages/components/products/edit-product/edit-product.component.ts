@@ -26,6 +26,8 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { catchError, finalize, Observable } from 'rxjs';
 import { error } from '@ant-design/icons-angular';
 import { Router } from '@angular/router';
+import { PriceRequest } from '../../../../core/models/interface/Price';
+import { SalePercentPipe } from '../../../../shared/pipes/sale-percent.pipe';
 
 @Component({
   selector: 'app-edit-product',
@@ -51,7 +53,8 @@ import { Router } from '@angular/router';
     NzPopconfirmModule,
     MoneyPipe,
     EditPriceComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SalePercentPipe
   ],
   providers: [
     NzImageService,
@@ -68,6 +71,7 @@ export class EditProductComponent {
   listBranch: Branch[] = []
   listProductLine: ProductLine[] = []
   listSizeTemplate: number[] = Constants.SIZE_TEMPLATE
+  listPriceTypeTem = Constants.PRICE_TYPE
 
   @Input() visible = false;
   @Input() isEdit: boolean = false;
@@ -107,17 +111,19 @@ export class EditProductComponent {
     } else {
       this.title = 'Thông tin sản phẩm'
     }
+    this.patchValue(this.product)
+  }
 
-    console.log("on changes")
+  patchValue(product: Product){
     this.formProduct.patchValue({
-      productId: this.product.productId,
-      productName: this.product.productName,
-      productColor: this.product.color,
-      branchId: this.product.productLine?.branch.branchId,
-      categoryId: this.product.category.categoryId,
-      productLineId: this.product.productLine?.productLineId,
-      listSize: this.product.listSize,
-      description: this.product.productLine?.description
+      productId: product.productId,
+      productName: product.productName,
+      productColor: product.color,
+      branchId: product.productLine?.branch.branchId,
+      categoryId: product.category.categoryId,
+      productLineId: product.productLine?.productLineId,
+      listSize: product.listSize,
+      description: product.productLine?.description
     })
   }
 
@@ -126,8 +132,12 @@ export class EditProductComponent {
   }
 
   close(): void {
+    if(this.isEdit && !this.isDisable){
+      this.patchValue(this.product)
+    }else{
+      this.onClosePopup.emit(this.isDisable)
+    }
     this.isDisable = true;
-    this.onClosePopup.emit(this.isDisable)
     this.title = "Thông tin sản phẩm"
   }
 
@@ -216,6 +226,25 @@ export class EditProductComponent {
     this.isEditPopupPrice = false;
   }
 
+  onSumitPopupEditPrice(priceRequest: PriceRequest){
+    const msgId = this.nzMessageService.loading(Constants.CREATING_MSG, {nzDuration: 0}).messageId
+    this.productService.createProductPrice(priceRequest).pipe(
+      finalize(() => {
+        this.nzMessageService.remove(msgId)
+      }),
+      catchError(() => {
+        this.nzMessageService.error(Constants.FAILED_MSG)
+        return new Observable<Response<Product>>
+      })
+    ).subscribe({
+      next: (response: Response<Product>) => {
+        this.product = response.data as Product
+        this.nzMessageService.success(Constants.UPDATED_MSG)
+        this.onSubmited.emit(this.product)
+      }
+    })
+  }
+
   createProduct(productCreate: ProductRequest) {
     const id = this.nzMessageService.loading(Constants.CREATING_MSG, { nzDuration: 0 }).messageId
     this.productService.createProduct(productCreate).pipe(
@@ -238,7 +267,7 @@ export class EditProductComponent {
   }
 
   updateProduct(productUpdate: ProductRequest) {
-    const id = this.nzMessageService.loading(Constants.UPDATING_MSG).messageId
+    const id = this.nzMessageService.loading(Constants.UPDATING_MSG, {nzDuration: 0}).messageId
     this.productService.updateProduct(productUpdate).pipe(
       finalize(() => {
         this.nzMessageService.remove(id)

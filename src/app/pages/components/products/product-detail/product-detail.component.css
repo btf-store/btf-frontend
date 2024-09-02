@@ -1,3 +1,6 @@
+.wrapper{
+  padding-top: 40px;
+}
 
 .wrap-product  {
   padding: 0 100px;
@@ -5,7 +8,7 @@
 }
 
 .wrap-image {
-  width: 50%;
+  width: 45%;
   max-height: 400px;
   overflow: hidden;
   justify-content: flex-end;
@@ -62,8 +65,9 @@
   text-decoration: line-through;
   height: 34px;
 }
+
 .wrap-infor {
-  width: 45%;
+  width: 42%;
 }
 
 .ant-radio-button-wrapper {
@@ -240,16 +244,29 @@ app-product {
   cursor: zoom-in;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1366px) {
+  .wrap-image{
+    width: 50%;
+  }
+  .wrap-infor {
+    width: 45%;
+  }
+}
+
+@media (max-width: 1025px) {
   .wrap-image{
     flex-direction: column-reverse;
     width: 50%;
     max-height: 600px;
   }
 
+  .wrap-infor {
+    width: 50%;
+  }
+
   .list-image {
     width: 100%;
-    height: 90px;
+    height: 70px;
     display: flex;
     flex-direction: row;
     overflow-y: hidden;
@@ -272,6 +289,10 @@ app-product {
 
 
 @media (max-width: 700px) {
+
+  .wrapper{
+    padding-top: 0px;
+  }
 
   .wrap-product-relate {
     grid-template-columns: repeat(2, 1fr);

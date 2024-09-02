@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { Product, ProductRequest } from '../../models/interface/Product';
 import { RequestParams } from '../../models/interface/request/RequestParams';
 import { HttpHeaders } from '@angular/common/http';
+import { PriceRequest } from '../../models/interface/Price';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +32,12 @@ export class ProductService {
     });
   }
 
+  adminGetProductById(productId: string): Observable<Response<Product>> {
+    return this.apiService.get(this.url.concat(`/byAdmin/${productId}`), {
+      responseType: 'json'
+    });
+  }
+
   getRelateProducts(params: RequestParams): Observable<Response<Product>> {
     return this.apiService.get(this.url.concat(`/relate`), {
       params: params,
@@ -44,14 +51,14 @@ export class ProductService {
     })
   }
 
-  createProduct(request: ProductRequest): Observable<Response<Product>> {
-    return this.apiService.post(this.url, request, {
+  createProduct(requestBody: ProductRequest): Observable<Response<Product>> {
+    return this.apiService.post(this.url, requestBody, {
       responseType: 'json'
     })
   }
 
-  updateProduct(request: ProductRequest): Observable<Response<Product>> {
-    return this.apiService.put(this.url, request, {
+  updateProduct(requestBody: ProductRequest): Observable<Response<Product>> {
+    return this.apiService.put(this.url, requestBody, {
       responseType: 'json'
     })
   }
@@ -66,6 +73,12 @@ export class ProductService {
   inActiveProduct(params: RequestParams): Observable<Response<Product>> {
     return this.apiService.put(this.url.concat(`/inActiveProduct`), null, {
       params: params,
+      responseType: 'json'
+    })
+  }
+
+  createProductPrice(requestBody: PriceRequest): Observable<Response<Product>> {
+    return this.apiService.post(this.url.concat("/createPrice"), requestBody, {
       responseType: 'json'
     })
   }

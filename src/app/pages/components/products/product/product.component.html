@@ -3,7 +3,7 @@
     <div class="wrap-head row">
       @if(product.salePercent !== 0){
       <div class="wrap-head-item wrap-sale">
-        <span>{{product.salePercent}}%</span>
+        <span>{{product.salePercent | salePercent}}</span>
       </div>
       }
       <!-- <div class="wrap-head-item wrap-new">
@@ -11,21 +11,28 @@
       </div> -->
     </div>
     <div [@imageState]="imageLoaded ? 'loaded' : 'loading'">
-      <img class="image" [src]="product.imageList[0].imageUrl" alt="productImage" loading="lazy" (load)="onImageLoad()">
+      @if(product.imageList.length > 0){
+        <img class="image" [src]="product.imageList[0].imageUrl" alt="productImage" loading="lazy" (load)="onImageLoad()">
+      } @else {
+        <img class="image" src="assets/images/logo.jpg" alt="productImage" loading="lazy" (load)="onImageLoad()">
+      }
     </div>
   </div>
   <!-- style="margin-bottom: 0; height: 60px;" -->
   <h4 class="productName">{{product.productName}}</h4>
 
   <div class="row gap-05 wrap-price">
-    <span class="new-price">{{product.priceList[0].value | money}}</span>
-    @if(product.priceList[1] != undefined){
-    <div class="old-price">
-      <span>
-        {{product.priceList[1].value | money}}
-      </span>
-    </div>
+    @if(product.priceList[0].priceType === 'CONTACT'){
+      <h3 class="new-price price-contact">Liên hệ</h3>
+    }@else {
+      <span class="new-price">{{product.priceList[0].value | money}}</span>
+      @if(product.priceList[1] != undefined){
+        <div class="old-price">
+          <span>
+            {{product.priceList[1].value | money}}
+          </span>
+        </div>
+        }
     }
-
   </div>
 </div>

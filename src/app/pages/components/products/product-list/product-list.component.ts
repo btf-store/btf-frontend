@@ -17,6 +17,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { catchError, finalize, Observable } from 'rxjs';
 import { Constants } from '../../../../core/constants/Constants';
+import { SalePercentPipe } from '../../../../shared/pipes/sale-percent.pipe';
 
 @Component({
   selector: 'app-product-list',
@@ -32,6 +33,7 @@ import { Constants } from '../../../../core/constants/Constants';
     MoneyPipe,
     EditImageComponent,
     NzPopconfirmModule,
+    SalePercentPipe
 ],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css'
@@ -53,6 +55,7 @@ export class ProductListComponent{
       categoryId: 0,
       categoryName: ''
     },
+    salePercent: 0,
     imageList: [],
     priceList: [{
       value: 0
@@ -96,6 +99,7 @@ export class ProductListComponent{
         categoryId: 0,
         categoryName: ''
       },
+      salePercent: 0,
       imageList: [],
       priceList: [{
         value: 0
@@ -107,11 +111,18 @@ export class ProductListComponent{
 
   getAllProduct(){
     const param: RequestParams = {
-
     }
     this.productService.searchProduct("keySearch").subscribe({
       next: (response: Response<Product>) => {
         this.products = response.data as Product[]
+      }
+    })
+  }
+
+  getProductById(productId: string){
+    this.productService.adminGetProductById(productId).subscribe({
+      next: (response: Response<Product>) => {
+        this.productDetail = response.data as Product
       }
     })
   }
@@ -121,12 +132,18 @@ export class ProductListComponent{
   }
 
   editImage(product: Product) {
-    this.visibleEditImage = !this.visibleEditImage;
+    this.visibleEditImage = true;
     this.productDetail = product
   }
 
   onSubmited(productCreated: Product) {
     this.viewProductDetail(productCreated)
+    this.getAllProduct()
+  }
+
+  onSubmitedEditImage(productId: number){
+    this.getProductById(productId.toString())
+    this.editImage(this.productDetail)
     this.getAllProduct()
   }
 

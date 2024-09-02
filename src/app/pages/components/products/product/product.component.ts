@@ -4,13 +4,15 @@ import { MoneyPipe } from '../../../../shared/pipes/money.pipe';
 import { FormsModule } from '@angular/forms';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Router } from '@angular/router';
+import { SalePercentPipe } from '../../../../shared/pipes/sale-percent.pipe';
 
 @Component({
   selector: 'app-product',
   standalone: true,
   imports: [
     MoneyPipe,
-    FormsModule
+    FormsModule,
+    SalePercentPipe
   ],
   animations: [
     trigger('imageState', [

@@ -8,7 +8,7 @@ export interface Product {
   productName: string,
   color: string,
   category: Category,
-  salePercent?:number,
+  salePercent:number,
   productLine?: ProductLine,
   imageList: Image[],
   priceList: Price[]  | [],

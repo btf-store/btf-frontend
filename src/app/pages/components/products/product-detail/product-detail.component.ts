@@ -59,6 +59,7 @@ export class ProductDetailComponent {
       categoryId: 0,
       categoryName: ''
     },
+    salePercent: 0,
     imageList: [],
     priceList: [{
       value: 0

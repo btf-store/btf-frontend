@@ -138,47 +138,63 @@
 
       <div *ngIf="isEdit" nz-row [nzGutter]="8">
         @if (product.priceList === null) {
-        <div nz-col nzSpan="8">
+        <div nz-col nzSpan="6">
           <nz-form-item style="align-items: center;">
             <nz-form-label>Giá</nz-form-label>
             <span>N/A</span>
           </nz-form-item>
         </div>
         } @else {
-        @if(product.priceList[1] !== undefined){
-        <div nz-col nzSpan="8">
-          <nz-form-item style="align-items: center;">
-            <nz-form-label>Giá khuyến mãi</nz-form-label>
-            <span>{{product.priceList[0].value| money}}</span>
-          </nz-form-item>
-        </div>
-        <div nz-col nzSpan="8">
-          <nz-form-item style="align-items: center;">
-            <nz-form-label>Giá Gốc</nz-form-label>
-            <span>{{product.priceList[1].value | money}}</span>
-          </nz-form-item>
-        </div>
-        } @else {
-        <div nz-col nzSpan="8">
-          <nz-form-item style="align-items: center;">
-            <nz-form-label>Giá Gốc</nz-form-label>
-            <span>{{product.priceList[0].value | money}}</span>
-          </nz-form-item>
-        </div>
+          @switch (product.priceList[0].priceType) {
+            @case (listPriceTypeTem[2].value) {
+            <div nz-col nzSpan="8">
+              <nz-form-item style="align-items: center;">
+                <nz-form-label>Giá Gốc</nz-form-label>
+                <span>Liên hệ</span>
+              </nz-form-item>
+            </div>
+            }
+            @case (listPriceTypeTem[1].value) {
+            <div nz-col nzSpan="8">
+              <nz-form-item style="align-items: center;">
+                <nz-form-label>Giá khuyến mãi</nz-form-label>
+                <span>{{product.priceList[0].value| money}}</span>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item style="align-items: center;">
+                <nz-form-label>Giá Gốc</nz-form-label>
+                <span>{{product.priceList[1].value | money}}</span>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="4">
+              <nz-form-item style="align-items: center;">
+                <nz-form-label>Giảm giá</nz-form-label>
+                <span>{{product.salePercent | salePercent}}</span>
+              </nz-form-item>
+            </div>
+            }
+            @case (listPriceTypeTem[0].value) {
+            <div nz-col nzSpan="8">
+              <nz-form-item style="align-items: center;">
+                <nz-form-label>Giá Gốc</nz-form-label>
+                <span>{{product.priceList[0].value | money}}</span>
+              </nz-form-item>
+            </div>
+            }
+          }
         }
-        }
-        <div nz-col nzSpan="8">
+        <div nz-col nzSpan="6">
           <button (click)="togglePopupAddPrice(product)" class="button-add add-price" *ngIf="!isDisable">
             <span>Thêm giá mới</span>
           </button>
         </div>
       </div>
-
-      <div nz-row [nzGutter]="8">
+      <!-- <div nz-row [nzGutter]="8">
         <div nz-col nzSpan="24">
           <nz-form-label>Mô tả Dòng sản phẩm</nz-form-label>
         </div>
-      </div>
+      </div> -->
       <div nz-row [nzGutter]="8">
         <div nz-col nzSpan="24" style="cursor: default;">
           <nz-form-item>
@@ -190,7 +206,7 @@
                 [style]="{ height: '320px' }">
                 <ng-template pTemplate="header">
                   <span class="ql-formats">
-                    {{product.productLine?.productLineName}}
+                    Mô tả dòng sản phẩm
                   </span>
                 </ng-template>
               </p-editor>
@@ -203,8 +219,7 @@
     <ng-template #footerTpl>
       <div style="float: right">
         <button nz-button style="margin-right: 8px;" (click)="close()">Hủy bỏ</button>
-        <button [ngClass]="{'disabled': !formProduct.valid}" *ngIf="!isDisable" nz-button nzType="primary"
-          nz-popconfirm
+        <button [ngClass]="{'disabled': !formProduct.valid}" *ngIf="!isDisable" nz-button nzType="primary" nz-popconfirm
           nzPopconfirmTitle="Bạn có chắc chắn muốn hoàn thành ?" (nzOnConfirm)="confirm()"
           nzPopconfirmPlacement="topRight" nz-button>
           Xác nhận
@@ -214,5 +229,7 @@
     </ng-template>
   </nz-drawer>
 </div>
-<app-edit-price [visible]="isEditPopupPrice" [product]="product"
-  (onClosePopup)="onClosePopupEditPrice()"></app-edit-price>
+
+<app-edit-price [visible]="isEditPopupPrice" [product]="product" (onClosePopup)="onClosePopupEditPrice()"
+  (onSubmitPopup)="onSumitPopupEditPrice($event)">
+</app-edit-price>

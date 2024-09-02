@@ -1,23 +1,32 @@
 <div class="wrapper column">
   <div class="wrap-product row  gap-2">
-    @if (product.imageList[currentIndexImage] !== undefined) {
-      <div class="wrap-image row gap-05" [@imageState]="imageLoaded ? 'loaded' : 'loading'" >
-        <div class="wrap-all-image column full-center gap-05">
-          <div class="slick-next" (click)="selectImage(currentIndexImage - 1)">
-            <i class="pi pi-angle-up"></i>
-          </div>
-          <div class="list-image column gap-05">
-              <img *ngFor="let image of product.imageList; let i = index" (load)="onImageLoad()" src="{{image.imageUrl}}" alt="product-image" (click)="selectImage(i)" loading="lazy">
-          </div>
-          <div class="slick-next" (click)="selectImage(currentIndexImage + 1)">
-            <i class="pi pi-angle-down"></i>
-          </div>
+    @if(product.imageList.length > 0){
+    <div class="wrap-image row gap-05" [@imageState]="imageLoaded ? 'loaded' : 'loading'">
+      <div class="wrap-all-image column full-center gap-05">
+        <div class="slick-next" (click)="selectImage(currentIndexImage - 1)">
+          <i class="pi pi-angle-up"></i>
         </div>
-        <div>
-          <img (load)="onImageLoad()" (click)="zoomImage(product.imageList[currentIndexImage].imageUrl)" class="main-image" src="{{product.imageList[currentIndexImage].imageUrl}}" alt="product-image" loading="lazy" >
+
+        <div class="list-image column gap-05">
+          <img *ngFor="let image of product.imageList; let i = index" (load)="onImageLoad()" src="{{image.imageUrl}}"
+            alt="product-image" (click)="selectImage(i)" loading="lazy">
+        </div>
+
+        <div class="slick-next" (click)="selectImage(currentIndexImage + 1)">
+          <i class="pi pi-angle-down"></i>
         </div>
       </div>
+      <div>
+        <img (load)="onImageLoad()" (click)="zoomImage(product.imageList[currentIndexImage].imageUrl)"
+          class="main-image" src="{{product.imageList[currentIndexImage].imageUrl}}" alt="product-image" loading="lazy">
+      </div>
+    </div>
+    } @else {
+    <div class="wrap-image row gap-05 img-backup" [@imageState]="imageLoaded ? 'loaded' : 'loading'">
+      <img (load)="onImageLoad()" class="main-image" src="assets/images/logo.jpg" alt="product-image" loading="lazy">
+    </div>
     }
+
 
 
     <div class="wrap-infor column gap-05">
@@ -28,6 +37,11 @@
       </div>
 
       <div class="row gap-2 align-center">
+        @if(product.priceList[0].priceType === 'CONTACT'){
+        <span class="new-price contact-price">
+          Liên hệ
+        </span>
+        } @else {
         <span class="new-price">
           {{product.priceList[0].value | money}}
         </span>
@@ -36,6 +50,8 @@
           {{product.priceList[1].value | money}}
         </span>
         }
+        }
+
       </div>
 
       <span>Kích thước</span>

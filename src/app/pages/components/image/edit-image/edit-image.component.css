@@ -59,3 +59,44 @@
   margin-top: 17px;
 }
 
+
+.wrap-type {
+  width: 140px;
+  margin: auto;
+  text-align: center;
+}
+
+.wrap-status {
+  width: 100px;
+  margin: auto;
+  text-align: center;
+}
+
+.input-infor {
+  box-shadow: none;
+  border: 1px solid white;
+  cursor: default;
+  max-width: 100%;
+  text-align: center;
+}
+
+.wrap-gr{
+  padding: 10px;
+  border-bottom: 1px solid rgb(230, 228, 228);
+}
+
+.input-infor:focus {
+  border: 1px solid white;
+}
+
+.wrap-delete button{
+  align-items: center;
+  border: none;
+  background-color: white;
+  color: red;
+  font-size: 1.5rem;
+  margin: auto;
+  height: 100%;
+  text-align: center;
+  cursor: pointer;
+}
