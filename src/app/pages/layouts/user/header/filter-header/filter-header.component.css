@@ -1,6 +1,8 @@
 .wrap {
   height: 100%;
-  width: 100%;
+  /* max-width: 100%; */
+  /* width: 70%; */
+  margin: auto;
 }
 
 .filter {

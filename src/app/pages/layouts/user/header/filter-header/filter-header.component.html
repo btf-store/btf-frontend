@@ -1,17 +1,4 @@
 <div class="card wrap">
-  <!-- <p-menubar [model]="items">
-    <ng-template pTemplate="item" let-item let-root="root">
-      <a href="{{item.url}}" pRipple class="flex align-items-center p-menuitem-link">
-        <span class="ml-2">{{ item.label }}</span>
-        <i *ngIf="item.items" [ngClass]="['pi', root ? 'pi-angle-down ml-2' : 'pi-angle-right ml-auto']"></i>
-      </a>
-    </ng-template>
-  </p-menubar> -->
-<!-- inline -->
-  <!-- <button class="button-navi" nz-button nzType="primary" (click)="toggleCollapsed()">
-    <span nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></span>
-  </button> -->
-
   <ul *ngIf="isNavbar" nz-menu [nzMode]="nzMode" class="filter" nzTheme="light">
     <li [routerLink]="url" nz-menu-item>
       TRANG CHỦ

@@ -4,27 +4,26 @@
   <div #allProduct class="product-title">
     <nz-divider nzText="TẤT CẢ SẢN PHẨM" nzOrientation="left"></nz-divider>
   </div>
-  <div  class="gap-1 wrap-product-filter row">
+  <div class="gap-1 wrap-product-filter row">
     <div class="wrap-filter">
-      <app-filter-product
-      (onSelectedChange)="selectedChange($event)"
-      (onPriceChange)="priceChange($event)"
-      ></app-filter-product>
+      <app-filter-product (onSelectedChange)="selectedChange($event)"
+        (onPriceChange)="priceChange($event)"></app-filter-product>
     </div>
-    <div  class="wrap-all-product column gap-1">
+    <div class="wrap-all-product column gap-1">
       <div class="row gap-2 wrap-product">
-        <app-product *ngFor="let product of products" [product]="product"></app-product>
+        @if(!isLoading){
+          <app-product *ngFor="let product of products" [product]="product"></app-product>
+        }
+        @if (isLoading) {
+          @for (item of listLoading; track $index) {
+            <nz-skeleton [nzActive]="true" [nzLoading]="true" [nzTitle]="true" [nzParagraph]="{ rows: 4 }"></nz-skeleton>
+          }
+        }
       </div>
       <div class="pagination">
-        <nz-pagination
-        (nzPageIndexChange)="onPageIndexChange($event)"
-        [(nzPageIndex)]="pageNumber"
-        [nzTotal]="totalElement"
-        [nzSize]="nzSize" nzShowSizeChanger
-        [nzPageSize]="pageSize"
-        [nzPageSizeOptions]="pageSizeOption"
-        (nzPageSizeChange)="onPageSizeChange($event)"
-        ></nz-pagination>
+        <nz-pagination (nzPageIndexChange)="onPageIndexChange($event)" [(nzPageIndex)]="pageable.pageNumber"
+          [nzTotal]="pageable.totalElements" [nzSize]="nzSize" nzShowSizeChanger [nzPageSize]="pageable.pageSize"
+          [nzPageSizeOptions]="pageSizeOption" (nzPageSizeChange)="onPageSizeChange($event)"></nz-pagination>
       </div>
     </div>
   </div>

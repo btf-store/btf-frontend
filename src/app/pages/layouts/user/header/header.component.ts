@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
@@ -12,6 +12,7 @@ import { NzMenuModeType } from 'ng-zorro-antd/menu';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NavigationEnd, Router } from '@angular/router';
 import { FilterHeaderComponent } from './filter-header/filter-header.component';
+import { CartService } from '../../../../core/services/cart/cart.service';
 
 @Component({
   selector: 'app-header',
@@ -27,7 +28,7 @@ import { FilterHeaderComponent } from './filter-header/filter-header.component';
     CommonModule,
     NzGridModule,
     NzIconModule,
-    NzBadgeModule
+    NzBadgeModule,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
@@ -37,9 +38,11 @@ export class HeaderComponent {
   isCollapsed = true;
   maxWidth = window.innerWidth;
   nzMode: NzMenuModeType = 'horizontal';
+  @Input() sizeCart!: number
 
   constructor(
-    private router: Router
+    private router: Router,
+    private cartService: CartService
   ) {}
 
   toggleNavbar() {
@@ -56,6 +59,7 @@ export class HeaderComponent {
         }
       }
     )
+    this.getSizeCart()
   }
 
   @HostListener('window:resize', ['$event'])
@@ -75,5 +79,12 @@ export class HeaderComponent {
 
   navigator(url: string){
     this.router.navigateByUrl(url)
+  }
+
+  getSizeCart(){
+    this.sizeCart = this.cartService.getSizeCart()
+    this.cartService.cartItemOb.subscribe((cart) => {
+      this.sizeCart = cart.length
+    })
   }
 }

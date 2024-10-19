@@ -15,11 +15,11 @@
     <!-- [nzTipFormatter]="onValueChange()" -->
     <div class="wrap-front column">
       <h3>GIÁ</h3>
-      <nz-slider [nzMin]="minValue" [nzMax]="maxValue" nzStep="500000" nzRange [(ngModel)]="value"
-      (nzOnAfterChange)="onAfterChange(value[0],  value[1])"
+      <nz-slider [nzMin]="currentMinPrice" [nzMax]="currentMaxPrice" [nzStep]="stepPrice" nzRange [(ngModel)]="rangePrice"
+      (nzOnAfterChange)="onAfterChange(rangePrice[0],  rangePrice[1])"
       ></nz-slider>
       <div class="row gap-05">
-        <span>{{ value[0] | money }}</span> - <span>{{ value[1] | money }}</span>
+        <span>{{ rangePrice[0] | money }}</span> - <span>{{ rangePrice[1] | money }}</span>
       </div>
     </div>
   </div>
@@ -33,12 +33,12 @@
           class="button-change"
           (click)="toggleBoxBranch()"
           >
-            <span *ngIf="!checkedBoxBranch"   nz-icon nzType="plus" nzTheme="outline"></span>
-            <span *ngIf="checkedBoxBranch" nz-icon nzType="minus" nzTheme="outline"></span>
+            <span *ngIf="!isCheckedBoxBranch"   nz-icon nzType="plus" nzTheme="outline"></span>
+            <span *ngIf="isCheckedBoxBranch" nz-icon nzType="minus" nzTheme="outline"></span>
           </button>
         </div>
       </div>
-      <div [ngClass]="{ 'wrap-checkbox column gap-05': true, 'open': checkedBoxBranch }">
+      <div [ngClass]="{ 'wrap-checkbox column gap-05': true, 'open': isCheckedBoxBranch }">
         <div class="row gap-1">
           <input class="checkbox" type="checkbox"/>
           <span>NIKE</span>
@@ -82,12 +82,12 @@
           class="button-change"
           (click)="toggleBoxSize()"
           >
-            <span *ngIf="!checkedBoxSize"   nz-icon nzType="plus" nzTheme="outline"></span>
-            <span *ngIf="checkedBoxSize" nz-icon nzType="minus" nzTheme="outline"></span>
+            <span *ngIf="!isCheckedBoxSize"   nz-icon nzType="plus" nzTheme="outline"></span>
+            <span *ngIf="isCheckedBoxSize" nz-icon nzType="minus" nzTheme="outline"></span>
           </button>
         </div>
       </div>
-      <div [ngClass]="{ 'wrap-checkbox column gap-05': true, 'open': checkedBoxSize }">
+      <div [ngClass]="{ 'wrap-checkbox column gap-05': true, 'open': isCheckedBoxSize }">
         <div class="row gap-1">
           <input class="checkbox" type="checkbox" />
           <span>39</span>

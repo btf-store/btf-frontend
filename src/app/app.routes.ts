@@ -7,6 +7,10 @@ import { AdminComponent } from './pages/layouts/admin/admin.component';
 import { ProductListComponent } from './pages/components/products/product-list/product-list.component';
 import { ProductLineListComponent } from './pages/components/productLines/product-line-list/product-line-list.component';
 import { BranchListComponent } from './pages/components/branch/branch-list/branch-list.component';
+import { LoginComponent } from './pages/components/auth/login/login.component';
+import { RegisterComponent } from './pages/components/auth/register/register.component';
+import { AdminAuthComponent } from './pages/components/auth/admin-auth/admin-auth.component';
+import { authGuard } from './core/guard/auth.guard';
 
 export const routes: Routes = [
   // { path: '', pathMatch: 'full', redirectTo: '/welcome' },
@@ -26,16 +30,30 @@ export const routes: Routes = [
       {
         path: 'cart',
         component: CartComponent
+      },
+      {
+        path: 'login',
+        component: LoginComponent
+      },
+      {
+        path: 'register',
+        component: RegisterComponent
       }
     ]
   },
   {
+    path: 'admin/login',
+    component: AdminAuthComponent
+  },
+  {
     path: 'admin-dashboard',
     component: AdminComponent,
+    canActivate: [authGuard],
+    data: { role: 'ROLE_ADMIN' },
     children: [
       // {
       //   path: '',
-      //   component: ProductListComponent
+      //   component:
       // },
       {
         path: 'product-management',

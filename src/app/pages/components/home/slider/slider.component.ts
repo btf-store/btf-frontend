@@ -19,7 +19,6 @@ export class SliderComponent {
   currentIndex = 0;
   intervalTime = 7000;
   isTransitioning = true;
-  ingredient: string = "a"
 
 
   ngOnInit(): void {

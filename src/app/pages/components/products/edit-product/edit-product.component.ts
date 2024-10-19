@@ -28,6 +28,8 @@ import { error } from '@ant-design/icons-angular';
 import { Router } from '@angular/router';
 import { PriceRequest } from '../../../../core/models/interface/Price';
 import { SalePercentPipe } from '../../../../shared/pipes/sale-percent.pipe';
+import { Size } from '../../../../core/models/interface/Size';
+import { SizeService } from '../../../../core/services/size/size.service';
 
 @Component({
   selector: 'app-edit-product',
@@ -65,13 +67,14 @@ import { SalePercentPipe } from '../../../../shared/pipes/sale-percent.pipe';
 export class EditProductComponent {
 
   formProduct: FormGroup;
+  listBranch: Branch[] = []
+  listProductLine: ProductLine[] = []
+  listSizeTemplate: Size[] = []
+  listPriceTypeTem = Constants.PRICE_TYPE
   title: string = "Thông tin sản phẩm"
   isDisable: boolean = true;
   isEditPopupPrice: boolean = false;
-  listBranch: Branch[] = []
-  listProductLine: ProductLine[] = []
-  listSizeTemplate: number[] = Constants.SIZE_TEMPLATE
-  listPriceTypeTem = Constants.PRICE_TYPE
+
 
   @Input() visible = false;
   @Input() isEdit: boolean = false;
@@ -83,6 +86,7 @@ export class EditProductComponent {
     private nzImageService: NzImageService,
     private branchService: BranchService,
     private productLineService: ProductLineService,
+    private sizeService: SizeService,
     private formBuilder: FormBuilder,
     private productService: ProductService,
     private nzMessageService: NzMessageService,
@@ -95,13 +99,14 @@ export class EditProductComponent {
       branchId: [1, [Validators.required, Validators.min(1)]],
       categoryId: [1, [Validators.required, Validators.min(1)]],
       productLineId: [1, [Validators.required, Validators.min(1)]],
-      listSize: [[], [Validators.required]],
+      listSizeId: [[], [Validators.required]],
       description: ''
     });
   }
 
   ngOnInit(): void {
     this.getAllBranch()
+    this.getAllSize()
   }
 
   ngOnChanges() {
@@ -115,6 +120,7 @@ export class EditProductComponent {
   }
 
   patchValue(product: Product){
+    const listSizeId = product.listSize.map((size) => size.sizeId);
     this.formProduct.patchValue({
       productId: product.productId,
       productName: product.productName,
@@ -122,13 +128,19 @@ export class EditProductComponent {
       branchId: product.productLine?.branch.branchId,
       categoryId: product.category.categoryId,
       productLineId: product.productLine?.productLineId,
-      listSize: product.listSize,
+      listSizeId: listSizeId,
       description: product.productLine?.description
     })
+    console.log(listSizeId)
   }
 
-  open(): void {
-    this.visible = true;
+  onPopupAddPrice(product: Product) {
+    this.product = product
+    this.isEditPopupPrice = true
+  }
+
+  onClosePopupEditPrice() {
+    this.isEditPopupPrice = false;
   }
 
   close(): void {
@@ -150,7 +162,7 @@ export class EditProductComponent {
     }
   }
 
-  toggleEdit() {
+  onEditProduct() {
     this.isDisable = false;
     this.title = "Cập nhật sản phẩm"
     if (this.product.productLine) {
@@ -158,7 +170,30 @@ export class EditProductComponent {
     }
   }
 
+  onSelectBranchChange(value: number) {
+    if(value != undefined){
+      this.getProductLineOfBranch(value)
+      this.formProduct.patchValue({
+        productLineId: 0,
+      })
+    }
+  }
 
+  onSelectProductLineChange(value: number) {
+    if (value !== undefined) {
+      if(value != 0){
+        this.getProductLineById(value);
+      }
+    }
+  }
+
+  getAllSize() {
+    this.sizeService.getAllSize().subscribe({
+      next: (response: Response<Size>) => {
+        this.listSizeTemplate = response.data as Size[]
+      }
+    })
+  }
 
   getAllBranch() {
     this.branchService.getAllBranch().subscribe({
@@ -187,45 +222,6 @@ export class EditProductComponent {
     })
   }
 
-  onSelectBranchChange(value: number) {
-    if(value != undefined){
-      this.getProductLineOfBranch(value)
-      this.formProduct.patchValue({
-        productLineId: 0,
-      })
-    }
-  }
-
-  onSelectProductLineChange(value: number) {
-    if (value !== undefined) {
-      if(value != 0){
-
-        this.getProductLineById(value);
-      }
-    }
-  }
-
-  zoomImage(url: string): void {
-    {
-      const images = [
-        {
-          src: url,
-          alt: 'product image'
-        }
-      ];
-      this.nzImageService.preview(images, { nzZoom: 1, nzRotate: 0, nzScaleStep: 0.5 });
-    }
-  }
-
-  togglePopupAddPrice(product: Product) {
-    this.product = product
-    this.isEditPopupPrice = !this.isEditPopupPrice
-  }
-
-  onClosePopupEditPrice() {
-    this.isEditPopupPrice = false;
-  }
-
   onSumitPopupEditPrice(priceRequest: PriceRequest){
     const msgId = this.nzMessageService.loading(Constants.CREATING_MSG, {nzDuration: 0}).messageId
     this.productService.createProductPrice(priceRequest).pipe(
@@ -251,7 +247,7 @@ export class EditProductComponent {
       finalize(() => {
         this.nzMessageService.remove(id)
       }),
-      catchError(error => {
+      catchError(() => {
         console.log(error)
         this.nzMessageService.error(Constants.FAILED_MSG);
         return new Observable<Response<Product>>;
@@ -261,7 +257,6 @@ export class EditProductComponent {
         this.product = response.data as Product
         this.nzMessageService.success(Constants.CREATED_MSG);
         this.onSubmited.emit(this.product)
-        // this.close()
       }
     )
   }
@@ -272,7 +267,7 @@ export class EditProductComponent {
       finalize(() => {
         this.nzMessageService.remove(id)
       }),
-      catchError(error => {
+      catchError(() => {
         this.nzMessageService.error(Constants.FAILED_MSG)
         return new Observable<Response<Product>>
       })
@@ -283,5 +278,11 @@ export class EditProductComponent {
         this.onSubmited.emit(this.product)
       }
     })
+  }
+
+  zoomImage(url: string): void {
+    {
+      this.nzImageService.preview([{src: url}], { nzZoom: 1, nzRotate: 0, nzScaleStep: 0.5 });
+    }
   }
 }

@@ -33,6 +33,23 @@ export const Constants = {
   UPLOADING_MSG: "Đang upload",
 
   UPLOADED_MSG: "Upload thành công",
+
+  CART_SCRET_KEY: "tGNYhS2zeccA6pQsDvq8sH2kUfOHW1XU",
+
+  CART_NAME: "cart_user",
+
+  WRONG_EMAIL_PASSWORD: "Tài khoản hoặc mật khẩu không chính xác",
+  ACCESS_DENIED: "Tài khoản không có quyền truy cập",
+
+  LOGIN_WARNING: "Vui lòng nhập tài khoản mật khẩu",
+
+  USER_TOKEN: "user_token",
+
+  LOGIN_SUCCESS: "Đăng nhập thành công",
+
+  REGISTER_SUCCESS: "Đăng ký thành công",
+
+  EMAIL_EXISTED: "Tên đăng nhập đã tồn tại"
   // LOCAL_URL: "http://747eac3b90362bb550482fa252a08b4c.serveo.net/",
 
   // LOCAL_URL: "https://f4f9-2402-800-6345-ed28-6911-b483-168b-f600.ngrok-free.app/"

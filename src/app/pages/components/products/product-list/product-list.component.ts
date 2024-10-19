@@ -1,4 +1,4 @@
-import { Component, OnChanges, SimpleChanges } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -7,17 +7,16 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { EditProductComponent } from "../edit-product/edit-product.component";
 import { ProductService } from '../../../../core/services/product/product.service';
-import { RequestParams } from '../../../../core/models/interface/request/RequestParams';
 import { Product } from '../../../../core/models/interface/Product';
 import { Response } from '../../../../core/models/generic/Response';
 import { MoneyPipe } from '../../../../shared/pipes/money.pipe';
-import { Router } from '@angular/router';
 import { EditImageComponent } from "../../image/edit-image/edit-image.component";
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { catchError, finalize, Observable } from 'rxjs';
 import { Constants } from '../../../../core/constants/Constants';
 import { SalePercentPipe } from '../../../../shared/pipes/sale-percent.pipe';
+import { RequestParams } from '../../../../core/models/generic/Request';
 
 @Component({
   selector: 'app-product-list',
@@ -34,65 +33,27 @@ import { SalePercentPipe } from '../../../../shared/pipes/sale-percent.pipe';
     EditImageComponent,
     NzPopconfirmModule,
     SalePercentPipe
-],
+  ],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css'
 })
-export class ProductListComponent{
-  isEdit:boolean = false;
-  visibleEditProduct: boolean = false;
-  visibleEditImage: boolean = false;
-  selectedProvince = 'Zhejiang'
-  provinceData = ['Zhejiang', 'Jiangsu']
-
-  listOfData = [ ];
-  products: Product[] = []
-  productDetail: Product = {
-    productId: 0,
-    productName: '',
-    color: '',
-    category: {
-      categoryId: 0,
-      categoryName: ''
-    },
-    salePercent: 0,
-    imageList: [],
-    priceList: [{
-      value: 0
-    }],
-    listSize: [],
-    status: ''
-  }
+export class ProductListComponent {
+  isEdit: boolean
+  visibleEditProduct: boolean
+  visibleEditImage: boolean
+  productDetail: Product
+  products: Product[]
 
   constructor(
     private productService: ProductService,
-    private router:  Router,
     private nzMessageService: NzMessageService
-  ){}
-
-  ngOnInit() {
-    this.getAllProduct()
-  }
-
-  viewProductDetail(product: Product){
-    this.isEdit = true;
-    this.visibleEditProduct = true;
-    this.productDetail = product
-  }
-
-  togglePopupEdit(){
-    this.visibleEditProduct = !this.visibleEditProduct
-  }
-
-  togglePopupEditImage(){
-    this.visibleEditImage = !this.visibleEditImage
-  }
-
-  togglePopupCreate() {
-    this.isEdit = false;
-    this.visibleEditProduct = !this.visibleEditProduct
+  ) {
+    this.isEdit = false
+    this.visibleEditProduct = false
+    this.visibleEditImage = false
+    this.products = []
     this.productDetail = {
-      productId: 0,
+      productId: "",
       productName: '',
       color: '',
       category: {
@@ -109,7 +70,67 @@ export class ProductListComponent{
     }
   }
 
-  getAllProduct(){
+  ngOnInit() {
+    this.getAllProduct()
+  }
+
+  scrollTopPage() {
+    window.scrollTo(0, 0);
+  }
+
+  onViewProductDetail(product: Product) {
+    this.isEdit = true;
+    this.visibleEditProduct = true;
+    this.productDetail = product
+  }
+
+  onPopupCreate() {
+    this.isEdit = false;
+    this.visibleEditProduct = true
+    this.productDetail = {
+      productId: "",
+      productName: '',
+      color: '',
+      category: {
+        categoryId: 0,
+        categoryName: ''
+      },
+      salePercent: 0,
+      imageList: [],
+      priceList: [{
+        value: 0
+      }],
+      listSize: [],
+      status: ''
+    }
+  }
+
+  onPopupEditImage(product: Product) {
+    this.visibleEditImage = true;
+    this.productDetail = product
+  }
+
+  closePopupEditProduct() {
+    this.visibleEditProduct = false;
+  }
+
+  closePopupEditImage() {
+    this.visibleEditImage = false;
+  }
+
+
+  onSubmitedEditProduct(productCreated: Product) {
+    this.onViewProductDetail(productCreated)
+    this.getAllProduct()
+  }
+
+  onSubmitedEditImage(productId: string) {
+    this.getProductById(productId.toString())
+    this.onPopupEditImage(this.productDetail)
+    this.getAllProduct()
+  }
+
+  getAllProduct() {
     const param: RequestParams = {
     }
     this.productService.searchProduct("keySearch").subscribe({
@@ -119,7 +140,7 @@ export class ProductListComponent{
     })
   }
 
-  getProductById(productId: string){
+  getProductById(productId: string) {
     this.productService.adminGetProductById(productId).subscribe({
       next: (response: Response<Product>) => {
         this.productDetail = response.data as Product
@@ -127,62 +148,42 @@ export class ProductListComponent{
     })
   }
 
-  scrollTopPage(){
-    window.scrollTo(0, 0);
-  }
-
-  editImage(product: Product) {
-    this.visibleEditImage = true;
-    this.productDetail = product
-  }
-
-  onSubmited(productCreated: Product) {
-    this.viewProductDetail(productCreated)
-    this.getAllProduct()
-  }
-
-  onSubmitedEditImage(productId: number){
-    this.getProductById(productId.toString())
-    this.editImage(this.productDetail)
-    this.getAllProduct()
-  }
-
-  inActiveProduct(product: Product){
+  onInActiveProduct(product: Product) {
     let param: RequestParams = {
       productId: product.productId
     }
-    const id = this.nzMessageService.loading(Constants.UPDATED_MSG).messageId
+    const msg_id = this.nzMessageService.loading(Constants.UPDATED_MSG).messageId
     this.productService.inActiveProduct(param).pipe(
       finalize(() => {
-        this.nzMessageService.remove(id)
+        this.nzMessageService.remove(msg_id)
       }),
       catchError(error => {
         console.log(error)
         return new Observable();
       })
     ).subscribe({
-      next:  () => {
+      next: () => {
         this.getAllProduct()
         this.nzMessageService.success(Constants.UPDATED_MSG)
       }
     })
   }
 
-  activeProduct(product: Product){
+  onActiveProduct(product: Product) {
     let param: RequestParams = {
       productId: product.productId
     }
-    const id = this.nzMessageService.loading(Constants.UPDATED_MSG).messageId
+    const msg_id = this.nzMessageService.loading(Constants.UPDATED_MSG).messageId
     this.productService.activeProduct(param).pipe(
       finalize(() => {
-        this.nzMessageService.remove(id)
+        this.nzMessageService.remove(msg_id)
       }),
       catchError(error => {
         console.log(error)
         return new Observable();
       })
     ).subscribe({
-      next:  () => {
+      next: () => {
         this.getAllProduct()
         this.nzMessageService.success(Constants.UPDATED_MSG)
       }

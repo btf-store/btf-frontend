@@ -1,15 +1,18 @@
 <div class="wrapper column">
-  <div class="wrap-product row  gap-2">
-    @if(product.imageList.length > 0){
-    <div class="wrap-image row gap-05" [@imageState]="imageLoaded ? 'loaded' : 'loading'">
+  <div *ngIf="isLoadingDetail" class="wrap-detail">
+    <nz-skeleton [nzActive]="true" [nzLoading]="true" [nzTitle]="true" [nzParagraph]="{ rows: 6 }"></nz-skeleton>
+  </div>
+  <div *ngIf="!isLoadingDetail" class="wrap-product row gap-2">
+    @if(productDetail.imageList.length > 0){
+    <div class="wrap-image row gap-05" [@imageState]="isImageLoaded ? 'loaded' : 'loading'">
       <div class="wrap-all-image column full-center gap-05">
         <div class="slick-next" (click)="selectImage(currentIndexImage - 1)">
           <i class="pi pi-angle-up"></i>
         </div>
 
         <div class="list-image column gap-05">
-          <img *ngFor="let image of product.imageList; let i = index" (load)="onImageLoad()" src="{{image.imageUrl}}"
-            alt="product-image" (click)="selectImage(i)" loading="lazy">
+          <img *ngFor="let image of productDetail.imageList; let i = index" (load)="onImageLoad()"
+            src="{{image.imageUrl}}" alt="product-image" (click)="selectImage(i)" loading="lazy">
         </div>
 
         <div class="slick-next" (click)="selectImage(currentIndexImage + 1)">
@@ -17,90 +20,90 @@
         </div>
       </div>
       <div>
-        <img (load)="onImageLoad()" (click)="zoomImage(product.imageList[currentIndexImage].imageUrl)"
-          class="main-image" src="{{product.imageList[currentIndexImage].imageUrl}}" alt="product-image" loading="lazy">
+        <img (load)="onImageLoad()" (click)="zoomImage(productDetail.imageList[currentIndexImage].imageUrl)"
+          class="main-image" src="{{productDetail.imageList[currentIndexImage].imageUrl}}" alt="product-image"
+          loading="lazy">
       </div>
     </div>
     } @else {
-    <div class="wrap-image row gap-05 img-backup" [@imageState]="imageLoaded ? 'loaded' : 'loading'">
+    <div class="wrap-image row gap-05 img-backup" [@imageState]="isImageLoaded ? 'loaded' : 'loading'">
       <img (load)="onImageLoad()" class="main-image" src="assets/images/logo.jpg" alt="product-image" loading="lazy">
     </div>
     }
 
-
-
     <div class="wrap-infor column gap-05">
-      <h2>{{product.productName}} / {{product.color}}</h2>
+      <h2>{{productDetail.productName}} / {{productDetail.color}}</h2>
       <div class="row gap-2">
-        <span>Loại: {{product.category.categoryName}}</span>
-        <span>Mã SP: {{product.productId}}</span>
+        <span>Loại: {{productDetail.category.categoryName}}</span>
+        <span>Mã SP: {{productDetail.productId}}</span>
       </div>
 
       <div class="row gap-2 align-center">
-        @if(product.priceList[0].priceType === 'CONTACT'){
+        @if(productDetail.priceList[0].priceType === 'CONTACT'){
         <span class="new-price contact-price">
           Liên hệ
         </span>
         } @else {
         <span class="new-price">
-          {{product.priceList[0].value | money}}
+          {{productDetail.priceList[0].value | money}}
         </span>
-        @if(product.priceList[1] !== undefined){
+        @if(productDetail.priceList[1] !== undefined){
         <span class="old-price">
-          {{product.priceList[1].value | money}}
+          {{productDetail.priceList[1].value | money}}
         </span>
         }
         }
 
       </div>
 
-      <span>Kích thước</span>
-      <nz-radio-group class="wrap-size" [(ngModel)]="sizeValue" nzButtonStyle="solid">
-        <label *ngFor="let size of product.listSize" class="radio-size" nz-radio-button
-          nzValue="{{size}}">{{size}}</label>
-      </nz-radio-group>
+      <form [formGroup]="formCartItem">
+        <span>Kích thước</span>
+        <nz-radio-group class="wrap-size" nzButtonStyle="solid" formControlName="productSize">
+          <label *ngFor="let size of productDetail.listSize" class="radio-size" nz-radio-button
+            nzValue="{{size.sizeId}}">{{size.sizeValue}}</label>
+        </nz-radio-group>
 
-      <div class="prd-description" style="margin-top: 7px;">
-        CAM KẾT SẢN PHẨM CHÍNH HÃNG 100%. ĐƯỢC BỒI HOÀN GẤP 10 LẦN NẾU KHÔNG PHẢI CHÍNH HÃNG
-      </div>
+        <div class="prd-description" style="margin-top: 7px;">
+          CAM KẾT SẢN PHẨM CHÍNH HÃNG 100%. ĐƯỢC BỒI HOÀN GẤP 10 LẦN NẾU KHÔNG PHẢI CHÍNH HÃNG
+        </div>
 
-      <form action="">
+
         <div class="add-cart col full-center">
           <div class="quantity row gap-2 align-center">
             <span>Số lượng</span>
             <div class="row gap-05">
-              <button type="button" class="change-quan" (click)="changeQuantity(-1)">
+              <button type="button" class="change-quan" (click)="changeQuantityProduct(-1)">
                 <span nz-icon nzType="minus" nzTheme="outline"></span>
               </button>
-              <input class="input-quantity" type="number" [value]="quantity">
-              <button type="button" class="change-quan" (click)="changeQuantity(1)">
+              <input formControlName="quantity" class="input-quantity" type="number">
+              <button type="button" class="change-quan" (click)="changeQuantityProduct(1)">
                 <span nz-icon nzType="plus" nzTheme="outline"></span>
               </button>
             </div>
           </div>
-          <button type="submit" class="button-add">Thêm vào giỏ</button>
+          <button (click)="addToCart()" class="button-add">Thêm vào giỏ</button>
         </div>
       </form>
     </div>
   </div>
 
-  <div class="wrap-detail">
+  <div *ngIf="!isLoadingDetail" class="wrap-detail">
     <nz-tabset>
       <div class="product-detail">
         <nz-tab class="wrap-des" nzTitle="MÔ TẢ SẢN PHẨM">
           <div>
-            <h3>{{product.productName}}</h3>
+            <h3>{{productDetail.productName}}</h3>
             <div [ngClass]="{'more-des': true, 'more-open': isShowMore}">
               <p class="text-des">
-                {{product.productLine?.description}}
+                {{productDetail.productLine?.description}}
               </p>
               <div class="wrap-list-image">
-                <div class="list-image-detail" *ngFor="let image of product.imageList; let i = index">
+                <div class="list-image-detail" *ngFor="let image of productDetail.imageList; let i = index">
                   <img src="{{image.imageUrl}}">
                 </div>
               </div>
             </div>
-            <div *ngIf="!isShowMore" (click)="showMore()" style="text-align: center; margin-top: 25px;"
+            <div *ngIf="!isShowMore" (click)="onShowMore()" style="text-align: center; margin-top: 25px;"
               class="btn-view">
               <a>Xem thêm</a>
             </div>
@@ -118,7 +121,13 @@
   <div style="width: 100%;">
     <h3 style="text-align: center; font-size: 25px;">SẢN PHẨM TƯƠNG TỰ</h3>
     <div class="row gap-2 wrap-product-relate">
-      <app-product *ngFor="let product of productsRelate" [product]="product"></app-product>
+      @if (isLoadingRelate) {
+      @for (item of listLoadingRelate; track $index) {
+      <nz-skeleton [nzActive]="true" [nzLoading]="true" [nzTitle]="true" [nzParagraph]="{ rows: 6 }"></nz-skeleton>
+      }
+      }@else {
+      <app-product *ngFor="let product of listProductRelate" [product]="product"></app-product>
+      }
     </div>
 
     <div style="text-align: center; margin-top: 20px;" class="btn-view">
@@ -126,3 +135,7 @@
     </div>
   </div>
 </div>
+
+<ng-template #notificationContent>
+  <a class="viewCart" href="cart">Xem giỏ hàng</a>
+</ng-template>

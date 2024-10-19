@@ -3,6 +3,10 @@ import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { NzEmptyComponent } from 'ng-zorro-antd/empty';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { CartService } from '../../../core/services/cart/cart.service';
+import { CartItem } from '../../../core/models/interface/Cart';
+import { MoneyPipe } from '../../../shared/pipes/money.pipe';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-cart',
@@ -10,17 +14,35 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
   imports: [
     NzIconModule,
     CommonModule,
-    NzEmptyComponent
+    NzEmptyComponent,
+    MoneyPipe
+  ],
+  animations: [
+    trigger('imageState', [
+      state('loading', style({
+        opacity: 0,
+        transform: 'scale(0.9)'
+      })),
+      state('loaded', style({
+        opacity: 1,
+        transform: 'scale(1)'
+      })),
+      transition('loading => loaded', [
+        animate('0.5s ease-in-out')
+      ])
+    ])
   ],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.css'
 })
 export class CartComponent {
-  cartItems = [1,2,3,4]
-  checkCart: boolean = false;
+  checkCart: boolean = true;
+  cartItems: CartItem[] = [];
+  imageLoaded: boolean = false;
 
   constructor(
-    private router: Router
+    private router: Router,
+    private cartService: CartService
   ){}
 
   ngOnInit(){
@@ -31,9 +53,23 @@ export class CartComponent {
         }
       }
     )
+    this.getCart()
   }
 
   navigator(url: string){
     this.router.navigateByUrl(url)
+  }
+
+  onImageLoad(){
+    this.imageLoaded = true;
+  }
+
+  getCart(){
+    this.cartItems = this.cartService.getCart();
+  }
+
+  removeCartItem(productId: string){
+    this.cartService.removeCartItem(productId)
+    this.getCart()
   }
 }

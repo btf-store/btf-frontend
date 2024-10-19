@@ -14,7 +14,7 @@
         <option value="4">Giảm giá</option>
       </select>
     </div>
-    <button class="button-add" (click)="togglePopupCreate()">
+    <button class="button-add" (click)="onPopupCreate()">
       <span nz-icon nzType="plus" nzTheme="outline"></span>
     </button>
   </div>
@@ -75,20 +75,20 @@
 
           <td class="wrap-icon">
             <span class="icon-action icon-view" nz-icon nzType="eye" nzTheme="outline"
-              (click)="viewProductDetail(data)"></span>
+              (click)="onViewProductDetail(data)"></span>
           </td>
           <td class="wrap-icon">
             <span class="icon-action icon-image" nz-icon nzType="file-image" nzTheme="outline"
-              (click)="editImage(data)"></span>
+              (click)="onPopupEditImage(data)"></span>
           </td>
           <td class="wrap-icon">
             @if (data.status === 'ACTIVE') {
             <span class="icon-action icon-active" nz-icon nzType="check" nzTheme="outline" nz-popconfirm
-              nzPopconfirmTitle="Bạn có chắc chắn muốn thay đổi trạng thái ?" (nzOnConfirm)="inActiveProduct(data)"
+              nzPopconfirmTitle="Bạn có chắc chắn muốn thay đổi trạng thái ?" (nzOnConfirm)="onInActiveProduct(data)"
               nzPopconfirmPlacement="topRight" nz-button></span>
             }@else {
             <span class="icon-action icon-inactive" nz-icon nzType="close" nzTheme="outline" nz-popconfirm
-              nzPopconfirmTitle="Bạn có chắc chắn muốn thay đổi trạng thái ?" (nzOnConfirm)="activeProduct(data)"
+              nzPopconfirmTitle="Bạn có chắc chắn muốn thay đổi trạng thái ?" (nzOnConfirm)="onActiveProduct(data)"
               nzPopconfirmPlacement="topRight" nz-button></span>
             }
           </td>
@@ -98,7 +98,7 @@
     </nz-table>
   </div>
 </div>
-<app-edit-product (onSubmited)="onSubmited($event)" [isEdit]="isEdit" [visible]="visibleEditProduct"
-  (onClosePopup)="togglePopupEdit()" [product]="productDetail"></app-edit-product>
+<app-edit-product (onSubmited)="onSubmitedEditProduct($event)" [isEdit]="isEdit" [visible]="visibleEditProduct"
+  (onClosePopup)="closePopupEditProduct()" [product]="productDetail"></app-edit-product>
 <app-edit-image (onSubmit)="onSubmitedEditImage($event)" [visible]="visibleEditImage" [product]="productDetail"
-  (onClosePopup)="togglePopupEditImage()"></app-edit-image>
+  (onClosePopup)="closePopupEditImage()"></app-edit-image>

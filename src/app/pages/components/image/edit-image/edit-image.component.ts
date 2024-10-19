@@ -5,24 +5,24 @@ import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzFormControlComponent, NzFormItemComponent, NzFormLabelComponent } from 'ng-zorro-antd/form';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzTableModule } from 'ng-zorro-antd/table';
 import { MessageService } from 'primeng/api';
-import { FileUploadEvent, FileUploadModule } from 'primeng/fileupload';
+import { FileUploadModule } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
 import { CommonModule } from '@angular/common';
 import { Image, UpdateImageProduct } from '../../../../core/models/interface/Image';
 import { NzImageService } from 'ng-zorro-antd/image';
 import { NzSelectModule } from 'ng-zorro-antd/select';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Constants } from '../../../../core/constants/Constants';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { Product } from '../../../../core/models/interface/Product';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ImageService } from '../../../../core/services/image/image.service';
-import { RequestParams } from '../../../../core/models/interface/request/RequestParams';
 import { catchError, finalize, Observable } from 'rxjs';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { RequestParams } from '../../../../core/models/generic/Request';
+import { Status } from '../../../../core/models/type/Status';
 
 @Component({
   selector: 'app-edit-image',
@@ -36,7 +36,6 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
     NzGridModule,
     NzIconModule,
     NzButtonComponent,
-    NzTableModule,
     FileUploadModule,
     ToastModule,
     CommonModule,
@@ -56,92 +55,109 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
   styleUrl: './edit-image.component.css'
 })
 export class EditImageComponent {
-  title = "Thông tin hình ảnh"
   formImage: FormGroup
-  statusSelected = "ACTIVE";
+  listFileAdd: File[]
   listImageType = Constants.TYPE_IMAGE
   listStatus = Constants.STATUS
-  isEdit: boolean = true;
-  isDoing: boolean = false;
-  listFileAdd: File[] = []
+  isEdit: boolean
+  isDoing: boolean
+  title: string
+  statusSelected: Status
 
   @Input() product!: Product;
   @Input() visible = false;
   @Output() onClosePopup = new EventEmitter<boolean>
-  @Output() onSubmit = new EventEmitter<number>
+  @Output() onSubmit = new EventEmitter<string>
 
   constructor(
     private nzImageService: NzImageService,
     private formBuilder: FormBuilder,
     private nzMessageService: NzMessageService,
-    private imageService: ImageService
+    private imageService: ImageService,
+
   ) {
+    this.title = "Thông tin hình ảnh"
+    this.statusSelected = "ACTIVE"
+    this.listFileAdd = []
     this.formImage = this.formBuilder.group({
       imageList: this.formBuilder.array([])
     })
+    this.isEdit = true
+    this.isDoing = false
+  }
+
+  ngOnChanges() {
+    this.resetData()
+    if (this.isEdit && this.product.imageList !== null) {
+      this.patchValueImage()
+    }
+    this.resetStatus()
   }
 
   get imageList(): FormArray {
     return this.formImage.get("imageList") as FormArray
   }
 
-  ngOnChanges() {
+  resetData() {
+    this.listFileAdd = []
     this.formImage = this.formBuilder.group({
       imageList: this.formBuilder.array([])
     })
-    this.listFileAdd = []
-    if (this.isEdit) {
-      if (this.product.imageList !== null) {
-        this.product.imageList.forEach((image: Image) => {
-          this.addImageToList(image)
-        })
-      }
-    }
   }
 
-  open(): void {
-    this.visible = true;
+  resetStatus() {
+    this.isEdit = true;
+    this.isDoing = false;
+  }
+
+  patchValueImage() {
+    this.product.imageList.forEach((image: Image) => {
+      this.addImageToList(image)
+    })
   }
 
   close(): void {
-    if(this.isDoing){
-      if(!this.isEdit){
-        this.product.imageList.forEach((image: Image) => {
-          this.addImageToList(image)
-        })
-        this.isEdit = true
-      }
+    if (this.isDoing) {
       this.title = "Thông tin hình ảnh"
-    }else{
+      this.resetData()
+      this.patchValueImage()
+    } else {
       this.visible = false;
-      this.isEdit = true;
       this.onClosePopup.emit(this.visible)
     }
-    this.isDoing = false;
+    this.resetStatus()
   }
 
   submit() {
     if (this.isEdit) {
-      const listImage: Image[] = this.getImageListData()
-      let listImageUpdate: UpdateImageProduct[] = listImage.map(image => {
-        return {
-          imageId: image.imageId,
-          typeImage: image.typeImage,
-          status: image.status
-        }
-      })
-      this.updateImageProduct(listImageUpdate)
+      this.onUpdateImageSubmit()
     } else {
-      if (this.listFileAdd.length == 0) {
-        this.nzMessageService.error("Vui lòng thêm hình ảnh");
-      } else {
-        const formData = new FormData();
-        this.listFileAdd.forEach(file => {
-          formData.append("listImageFile", file);
-        })
-        this.uploadImageProduct(this.product.productId, formData)
-      }
+      this.onUploadImageSubmit()
     }
+  }
+
+  onUploadImageSubmit(){
+    if (this.listFileAdd.length == 0) {
+      this.nzMessageService.error("Vui lòng thêm hình ảnh", {nzDuration: 2500});
+    } else {
+      const imagesFile = new FormData();
+      this.listFileAdd.forEach(file => {
+        imagesFile.append("listImageFile", file);
+      })
+      this.uploadImageProduct(this.product.productId, imagesFile)
+    }
+  }
+
+  onUpdateImageSubmit(){
+    const listImage = this.getImageListData() as Image[]
+    let listImageUpdate: UpdateImageProduct[] = listImage.map(image => {
+      return {
+        imageId: image.imageId,
+        typeImage: image.typeImage,
+        status: image.status
+      }
+    })
+    this.updateImageProduct(listImageUpdate)
   }
 
   removeImageFile(index: number) {
@@ -149,12 +165,12 @@ export class EditImageComponent {
     this.removeImageInList(index)
   }
 
-  uploadImageProduct(productId: number, formData: FormData) {
+  uploadImageProduct(productId: string, imagesFile: FormData) {
     let param: RequestParams = {
       productId: productId
     }
     const msgId = this.nzMessageService.loading(Constants.UPLOADING_MSG, { nzDuration: 0 }).messageId
-    this.imageService.uploadImageProduct(param, formData).pipe(
+    this.imageService.uploadImageProduct(param, imagesFile).pipe(
       finalize(() => {
         this.nzMessageService.remove(msgId)
       }),
@@ -165,8 +181,7 @@ export class EditImageComponent {
     ).subscribe(() => {
       this.nzMessageService.success(Constants.UPLOADED_MSG)
       this.onSubmit.emit(productId);
-      this.isEdit = true;
-      this.isDoing = false;
+      this.resetStatus()
     })
   }
 
@@ -183,23 +198,21 @@ export class EditImageComponent {
     ).subscribe(() => {
       this.nzMessageService.success(Constants.UPDATED_MSG)
       this.onSubmit.emit(this.product.productId);
-      this.isDoing = false;
+      this.resetStatus()
     })
   }
 
   onAddingImage() {
+    this.title = "Thêm hình ảnh"
     this.isDoing = true;
     this.isEdit = false;
-    this.formImage = this.formBuilder.group({
-      imageList: this.formBuilder.array([])
-    })
-    this.title = "Thêm hình ảnh"
+    this.resetData()
   }
 
   onUpdatingImage() {
+    this.title = "Chỉnh sửa hình ảnh"
     this.isDoing = true;
     this.isEdit = true;
-    this.title = "Chỉnh sửa hình ảnh"
   }
 
   addImageToList(image: Image) {
@@ -215,16 +228,13 @@ export class EditImageComponent {
     this.imageList.removeAt(index)
   }
 
-  getImageUrl(imageGroup: AbstractControl<any, any>): string {
+  getImageUrlFromGroup(imageGroup: AbstractControl<any, any>): string {
     return imageGroup.get('imageUrl')?.value
   }
 
   getImageListData() {
     return this.imageList.value
   }
-
-
-  listPreviewUrl: Array<string> = []
 
   onFileSelected(event: Event): void {
     const fileInput = event.target as HTMLInputElement
@@ -242,7 +252,6 @@ export class EditImageComponent {
             typeImage: this.listImageType[0],
             status: this.listStatus[0]
           })
-          // this.listPreviewUrl?.push(reader.result as string)
         }
         reader.readAsDataURL(file)
       })
@@ -251,13 +260,7 @@ export class EditImageComponent {
 
   zoomImage(url: string): void {
     {
-      const images = [
-        {
-          src: url,
-          alt: 'product image'
-        }
-      ];
-      this.nzImageService.preview(images, { nzZoom: 1, nzRotate: 0, nzScaleStep: 0.5 });
+      this.nzImageService.preview([{ src: url, }], { nzZoom: 1, nzRotate: 0, nzScaleStep: 0.5 });
     }
   }
 }

@@ -16,3 +16,7 @@ export interface Options {
     includeHeaders?: string[];
   } | boolean;
 }
+
+export interface RequestParams {
+  [param: string]: string | number | boolean
+}

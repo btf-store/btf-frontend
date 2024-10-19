@@ -125,9 +125,9 @@
             <nz-form-control>
               <nz-select [ngClass]="{'input-infor': true, 'input-open': !isDisable}" name="productSize"
                 [nzMaxTagCount]="9" [nzMaxTagPlaceholder]="tagPlaceHolder" nzMode="multiple"
-                nzPlaceHolder="Vui lòng chọn kích thước" [nzDisabled]="isDisable" formControlName="listSize">
+                nzPlaceHolder="Vui lòng chọn kích thước" [nzDisabled]="isDisable" formControlName="listSizeId">
                 @for (item of listSizeTemplate; track item) {
-                <nz-option [nzLabel]="item" [nzValue]="item"></nz-option>
+                <nz-option [nzLabel]="item.sizeValue" [nzValue]="item.sizeId"></nz-option>
                 }
                 <ng-template #tagPlaceHolder let-selectedList>and {{ selectedList.length }} more size</ng-template>
               </nz-select>
@@ -185,7 +185,7 @@
           }
         }
         <div nz-col nzSpan="6">
-          <button (click)="togglePopupAddPrice(product)" class="button-add add-price" *ngIf="!isDisable">
+          <button (click)="onPopupAddPrice(product)" class="button-add add-price" *ngIf="!isDisable">
             <span>Thêm giá mới</span>
           </button>
         </div>
@@ -224,7 +224,7 @@
           nzPopconfirmPlacement="topRight" nz-button>
           Xác nhận
         </button>
-        <button *ngIf="isDisable" nz-button nzType="primary" (click)="toggleEdit()">Chỉnh sửa</button>
+        <button *ngIf="isDisable" nz-button nzType="primary" (click)="onEditProduct()">Chỉnh sửa</button>
       </div>
     </ng-template>
   </nz-drawer>

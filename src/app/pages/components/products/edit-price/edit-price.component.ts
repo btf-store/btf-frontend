@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 import { Constants } from '../../../../core/constants/Constants';
 import { NzFormControlComponent, NzFormLabelComponent } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
@@ -10,8 +10,6 @@ import { MoneyPipe } from '../../../../shared/pipes/money.pipe';
 import { Product } from '../../../../core/models/interface/Product';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { MessageService } from 'primeng/api';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { concatMap } from 'rxjs';
 import { PriceRequest } from '../../../../core/models/interface/Price';
 
 @Component({

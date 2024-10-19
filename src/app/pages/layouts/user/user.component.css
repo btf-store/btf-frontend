@@ -1,6 +1,14 @@
-.wrapper {
-  margin-top: 148px;
+.wrapper-content {
+  /* margin-top: 148px; */
+  margin: 5px 0;
+  min-height: 70%;
 }
+
+.wrap-header{
+  min-height: 148px;
+}
+
+
 
 /* @media (max-width: 1650px) {
   .wrapper {
@@ -9,19 +17,22 @@
 } */
 
 @media (max-width: 1367px) {
-  .wrapper {
-    margin-top: 115px;
+  .wrap-header{
+    min-height: 115px;
   }
 }
 
 @media (max-width: 1023px) {
-  .wrapper {
-    margin-top: 67px;
+  .wrap-header {
+    min-height: 67px;
   }
 }
 
 @media (max-width: 431px) {
-  .wrapper {
-    margin-top: 50px;
+  .wrap-header {
+    min-height: 50px;
   }
+  /* .wrapper-content {
+    margin-top: 50px;
+  } */
 }

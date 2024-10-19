@@ -1,5 +1,5 @@
 
-import { Component, ElementRef, EventEmitter, HostListener, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { SliderComponent } from "./slider/slider.component";
 import { ProductComponent } from "../products/product/product.component";
 import { NavigationEnd, Router } from '@angular/router';
@@ -7,13 +7,16 @@ import { CommonModule } from '@angular/common';
 import { FilterProductComponent } from "../products/filter-product/filter-product.component";
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
+import { NzSkeletonComponent } from 'ng-zorro-antd/skeleton';
 import { NzSizeDSType } from 'ng-zorro-antd/core/types';
 import { ProductService } from '../../../core/services/product/product.service';
-import { Response } from '../../../core/models/generic/Response';
-import { Product } from '../../../core/models/interface/Product';
-import { PaginationResponse } from '../../../core/models/generic/PaginationResponse';
-import { RequestParams } from '../../../core/models/interface/request/RequestParams';
-import { HttpHeaders } from '@angular/common/http';
+import { PaginationResponse, Response } from '../../../core/models/generic/Response';
+import { Product, ProductFilter } from '../../../core/models/interface/Product';
+import { RequestParams } from '../../../core/models/generic/Request';
+import { Pageable } from '../../../core/models/generic/Page';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { Constants } from '../../../core/constants/Constants';
+import { catchError, finalize, Observable } from 'rxjs';
 
 
 
@@ -26,33 +29,44 @@ import { HttpHeaders } from '@angular/common/http';
     CommonModule,
     FilterProductComponent,
     NzDividerModule,
-    NzPaginationModule
+    NzPaginationModule,
+    NzSkeletonComponent
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
 export class HomeComponent {
   @ViewChild("allProduct") elementProducts!: ElementRef
-  sortBy: string = 'salePercent'
   nzSize: NzSizeDSType = "default";
-  productName: string = ''
-  productLineId: number = 0
-  priceFrom: number = 0;
-  priceTo: number = 0;
-  categoryId: number = 0;
-
-  isAscending: boolean = true;
-  pageNumber = 1;
-  pageSize = 16;
-  totalElement = 0;
-  totalPages = 0;
+  filterProduct: ProductFilter
+  pageable: Pageable
   products: Product[] = []
   pageSizeOption: number[] = [16, 32]
+  listLoading = [0, 1, 2, 3]
+  isLoading: boolean = true
 
   constructor(
     private router: Router,
-    private productService: ProductService
-  ) { }
+    private productService: ProductService,
+    private nzMessageService: NzMessageService,
+  ) {
+    this.filterProduct = {
+      productName: '',
+      productLineId: 0,
+      priceFrom: 0,
+      priceTo: 0,
+      categoryId: 0,
+      sortBy: 'salePercent',
+      isAscending: true
+    }
+
+    this.pageable = {
+      pageNumber: 1,
+      pageSize: 16,
+      totalElements: 0,
+      totalPages: 0
+    }
+  }
 
   ngOnInit() {
     this.checkScreenSize();
@@ -81,23 +95,24 @@ export class HomeComponent {
 
   getFilteredProduct() {
     const requestParam: RequestParams = {
-      page: this.pageNumber - 1,
-      pageSize: this.pageSize,
-      productName: this.productName,
-      productLineId: this.productLineId,
-      priceFrom: this.priceFrom,
-      priceTo: this.priceTo,
-      categoryId: this.categoryId,
-      sortBy: this.sortBy,
-      isAscending: this.isAscending
-
+      page: this.pageable.pageNumber - 1,
+      pageSize: this.pageable.pageSize,
+      productName: this.filterProduct.productName,
+      productLineId: this.filterProduct.productLineId,
+      priceFrom: this.filterProduct.priceFrom,
+      priceTo: this.filterProduct.priceTo,
+      categoryId: this.filterProduct.categoryId,
+      sortBy: this.filterProduct.sortBy,
+      isAscending: this.filterProduct.isAscending
     }
+    this.isLoading = true
     this.productService.getFilteredProduct(requestParam).subscribe({
       next: (response: Response<Product>) => {
         const pageResponse: PaginationResponse<Product> = response.data as PaginationResponse<Product>
         this.products = pageResponse.content
-        this.totalElement = pageResponse.totalElements
-        this.totalPages = pageResponse.totalPages
+        this.pageable.totalElements = pageResponse.totalElements
+        this.pageable.totalPages = pageResponse.totalPages
+        this.isLoading = false
       },
       error: (error) => {
         console.log(error)
@@ -106,13 +121,13 @@ export class HomeComponent {
   }
 
   onPageIndexChange(pageChange: number) {
-    this.pageNumber = pageChange;
+    this.pageable.pageNumber = pageChange;
     this.getFilteredProduct()
     this.changeScroll(this.elementProducts);
   }
 
   onPageSizeChange(pageSize: number) {
-    this.pageSize = pageSize;
+    this.pageable.pageSize = pageSize;
     this.getFilteredProduct()
     this.changeScroll(this.elementProducts);
   }
@@ -122,14 +137,15 @@ export class HomeComponent {
   }
 
   selectedChange(value: string) {
-    this.sortBy = JSON.parse(value).sortBy
-    this.isAscending = JSON.parse(value).isAsceding
+    this.filterProduct.sortBy = JSON.parse(value).sortBy
+    this.filterProduct.isAscending = JSON.parse(value).isAsceding
     this.getFilteredProduct();
   }
 
-  priceChange(value: [number, number]){
-    this.priceFrom = value[0]
-    this.priceTo = value[1]
+  priceChange(value: [number, number]) {
+    this.filterProduct.priceFrom = value[0]
+    this.filterProduct.priceTo = value[1]
+    this.pageable.pageNumber = 1
     this.getFilteredProduct()
   }
 }

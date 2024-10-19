@@ -27,48 +27,53 @@ import { CommonModule, NgClass } from '@angular/common';
   ]
 })
 export class FilterProductComponent {
-  minValue: number = 0;
-  maxValue: number = 5000000;
-  value = [this.minValue,  this.maxValue]
-  value2 = []
-  checkedBoxBranch = true;
-  checkedBoxSize = true;
+  currentMinPrice: number
+  currentMaxPrice: number
+  stepPrice: number
+  rangePrice: number[]
+  isCheckedBoxBranch: boolean
+  isCheckedBoxSize: boolean
+
   @Input() selectedValue: string = ""
   @Output() onPriceChange = new EventEmitter<[number, number]>()
   @Output() onSelectedChange = new EventEmitter<string>()
 
-
-
-  constructor(private moneyPipe: MoneyPipe){}
-
-  changeValue(){
-    this.value = [this.minValue, this.maxValue]
+  constructor(private moneyPipe: MoneyPipe) {
+    this.currentMinPrice = 0;
+    this.currentMaxPrice = 5000000;
+    this.stepPrice = 500000;
+    this.rangePrice = [this.currentMinPrice, this.currentMaxPrice];
+    this.isCheckedBoxBranch = false;
+    this.isCheckedBoxSize = false;
   }
 
-  onValueChange(): ((value: number) => string)  {
+  changeValue() {
+    this.rangePrice = [this.currentMinPrice, this.currentMaxPrice]
+  }
+
+  onValueChange(): ((value: number) => string) {
     return (newValue: number): string => {
       return this.moneyPipe.transform(newValue)
     };
   }
 
-  onAfterChange(minValue:number, maxValue:number) {
-      //  this.moneyPipe.transform(newValue)
-       this.onPriceChange.emit([minValue, maxValue])
+  onAfterChange(minValue: number, maxValue: number) {
+    this.onPriceChange.emit([minValue, maxValue])
   }
 
-  toggleBoxBranch(){
-    this.checkedBoxBranch = !this.checkedBoxBranch
+  toggleBoxBranch() {
+    this.isCheckedBoxBranch = !this.isCheckedBoxBranch
   }
 
-  toggleBoxSize(){
-    this.checkedBoxSize = !this.checkedBoxSize
+  toggleBoxSize() {
+    this.isCheckedBoxSize = !this.isCheckedBoxSize
   }
 
-  onSortSelected(selectedValue: string){
+  onSortSelected(selectedValue: string) {
     this.onSelectedChange.emit(selectedValue)
   }
 
-  onSelectedBranch(branchId: number){
+  onSelectedBranch(branchId: number) {
 
   }
 }
